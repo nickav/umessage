@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "sqlite": "^3.0.0"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "arrowParens": "always"
+  }
+}
