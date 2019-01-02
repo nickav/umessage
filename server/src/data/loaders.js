@@ -55,5 +55,25 @@ export default function createLoaders(ctx) {
           return orderArrayByIds(messages, chatIds, 'chat_id');
         });
     }),
+
+    attachments: new DataLoader((messageIds) => {
+      return db
+        .all(
+          `
+        SELECT ROWID as id, guid, created_date, mime_type, transfer_name,
+          is_outgoing, total_bytes, hide_attachment, message_id
+        FROM attachment
+        JOIN message_attachment_join ON attachment.ROWID = message_attachment_join.attachment_id
+        WHERE message_id IN (${messageIds.join(', ')});
+      `
+        )
+        .then((attachments) => {
+          const groups = _.groupBy(
+            attachments,
+            (attachment) => attachment.message_id
+          );
+          return messageIds.map((id) => groups[id]);
+        });
+    }),
   };
 }

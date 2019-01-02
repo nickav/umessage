@@ -42,9 +42,9 @@ const Schema = `
     text: String!
     date: Date!
     is_from_me: Boolean!
-    cache_has_attachments: Boolean!
 
     handle: Handle
+    attachments: [Attachment]
   }
 
   # Top-level message groups
@@ -61,8 +61,9 @@ const Schema = `
     id: Int!
     guid: String!
     created_date: Date!
-    mime_type: String!
-    transfer_name: String!
+    mime_type: String
+    transfer_name: String
+    total_bytes: Int
   }
 
   # metatags response
