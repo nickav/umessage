@@ -1966,9 +1966,9 @@ has-values@^1.0.0:
     is-number "^3.0.0"
     kind-of "^4.0.0"
 
-hibar@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/hibar/-/hibar-0.2.0.tgz#3e0efb0498d3341303f4db876edfd5278ef4c859"
+hibar@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/hibar/-/hibar-0.3.3.tgz#93db0c00e736529b731fca002c932d27de7c5a01"
   dependencies:
     lodash.merge "^4.6.0"
 

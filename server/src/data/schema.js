@@ -52,10 +52,9 @@ const Schema = `
     id: Int!
     guid: String!
     chat_identifier: String!
-    is_archived: Boolean!
-    service_name: String
 
-    #handles: [Handle]
+    handles: [Handle]
+    messagePage(page: PageInput = {}): PageResult
   }
 
   type Attachment {
@@ -74,31 +73,29 @@ const Schema = `
   }
 
   type Query {
-    chatPage(page: PageInput = {}): PageResult
+    chats: [Chat]
+    chat(id: Int!): Chat
 
     handles: [Handle]
-    chats: [Chat]
-    messages: [Message]
 
     # fetch metatags for a given url
     metatags(url: String!): MetaInfo
   }
 
-  #type Mutation {
+  type Mutation {
     # create a new message
-  #  sendMessage(text: String!, groupId: Int!, clientTS: String!): Message
-  #}
+    sendMessage(text: String!, groupId: Int!, clientTS: String!): Message
+  }
 
-  #type Subscription {
+  type Subscription {
     # called when a new message is added
-  #  messageAdded: Message
-  #}
+    messageAdded: Message
+  }
 
   schema {
     query: Query
-
-    #mutation: Mutation,
-    #subscription: Subscription
+    mutation: Mutation
+    subscription: Subscription
   }
 `;
 
