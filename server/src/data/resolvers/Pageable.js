@@ -1,5 +1,5 @@
 export default {
   __resolveType: (obj, args, ctx) => {
-    return obj.text ? 'Message' : 'Handle';
+    return obj.text ? 'Message' : 'Chat';
   },
 };
