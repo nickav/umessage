@@ -7,12 +7,12 @@
   "scripts": {
     "format": "yarn f $(git ls-files -c -m | grep '\\.\\(jsx\\?\\|json\\|scss\\)$' | tr '\n' ' ')",
     "f": "node_modules/.bin/prettier --config package.json --write",
-    "lib": "babel server --out-dir lib --presets es2015,stage-2 --source-maps",
+    "dist": "babel ./src --out-dir dist --source-maps",
     "precommit": "lint-staged",
     "server": "yarn start",
     "start": "if-env NODE_ENV=production && yarn start:prod || yarn start:dev",
-    "start:dev": "nodemon --watch 'src/**/*' ./src --exec babel-node --presets es2015,stage-2",
-    "start:prod": "node lib"
+    "start:dev": "nodemon --watch 'src/**/*' ./src --exec babel-node",
+    "start:prod": "***REMOVED*** && node dist"
   },
   "lint-staged": {
     "*.{js,jsx,json,scss}": [

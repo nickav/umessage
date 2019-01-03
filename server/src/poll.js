@@ -46,7 +46,7 @@ export default (ctx) => {
   pollMessages(ctx.db, POLL_INTERVAL, (messages) => {
     console.log(`Recieved ${messages.length} message(s).`);
 
-    for (let i = 0, n = messages.length; i < n; i++) {
+    for (let i = messages.length - 1; i >= 0; i--) {
       onMessageAdded(messages[i]);
     }
   });
