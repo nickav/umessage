@@ -31,6 +31,7 @@ async function init() {
   const server = new ApolloServer({
     schema,
     context: ({ ctx, ...rest }) => createContext(app.context),
+    tracing: process.env.NODE_ENV === 'development',
   });
 
   /*

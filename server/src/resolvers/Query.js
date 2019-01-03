@@ -3,11 +3,11 @@ import got from 'got';
 import { transformMessage } from './helpers';
 
 export default {
-  handles: (_, args, ctx) =>
-    ctx.db.all(`SELECT ${db.getHandleProps()} FROM handle;`),
+  handles: (_, args, { db }) =>
+    db.all(`SELECT ${db.getHandleProps()} FROM handle;`),
 
-  chats: (_, args, ctx) =>
-    ctx.db.all(`
+  chats: (_, args, { db }) =>
+    db.all(`
       SELECT ${db.getChatProps()} FROM message
       JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
       JOIN chat ON chat_message_join.chat_id = chat.ROWID
@@ -15,8 +15,8 @@ export default {
       ORDER BY date DESC;
     `),
 
-  chat: (_, args, ctx) =>
-    ctx.db.get(`
+  chat: (_, args, { db }) =>
+    db.get(`
       SELECT ${db.getChatProps()} FROM chat
       WHERE ROWID = ${args.id};
     `),
