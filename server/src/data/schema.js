@@ -86,7 +86,7 @@ const Schema = `
 
   type Mutation {
     # create a new message
-    sendMessage(handleGuid: String!, text: String!): Boolean!
+    sendMessage(handleGuids: [String]!, text: String!): Boolean!
   }
 
   type Subscription {
