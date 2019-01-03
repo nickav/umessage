@@ -6,8 +6,7 @@ import { groupWithComputedProps } from './Group';
 const pubsub = new PubSub();
 
 const MESSAGE_ADDED_TOPIC = 'messageAdded';
-const GROUP_ADDED_TOPIC = 'groupAdded';
-const GROUP_REMOVED_TOPIC = 'groupRemoved';
+const CHAT_ADDED_TOPIC = 'chatAdded';
 
 /* */
 // Helpers
@@ -29,19 +28,9 @@ export const onMessageAdded = (message) => {
   return message;
 };
 
-export const onGroupAdded = (group, users) => {
-  pubsub.publish(GROUP_ADDED_TOPIC, {
-    [GROUP_ADDED_TOPIC]: group,
-    notifyUserIds: getArrayIds(users),
-    users,
-  });
-
-  return group;
-};
-
-export const onGroupRemoved = (group, users) => {
-  pubsub.publish(GROUP_REMOVED_TOPIC, {
-    [GROUP_REMOVED_TOPIC]: group,
+export const onChatAdded = (group, users) => {
+  pubsub.publish(CHAT_ADDED_TOPIC, {
+    [CHAT_ADDED_TOPIC]: group,
     notifyUserIds: getArrayIds(users),
     users,
   });
@@ -55,6 +44,7 @@ export default {
       () => pubsub.asyncIterator(MESSAGE_ADDED_TOPIC),
       (payload, args, ctx) => {
         const { groupId, userId } = payload.messageAdded;
+
         return ctx.loaders.groupUsers
           .load(groupId)
           .then((users) => users.some((user) => user.id === userId));
@@ -64,17 +54,10 @@ export default {
 
   groupAdded: {
     subscribe: withFilter(
-      () => pubsub.asyncIterator(GROUP_ADDED_TOPIC),
+      () => pubsub.asyncIterator(CHAT_ADDED_TOPIC),
       notifyUserIdsFilter
     ),
     resolve: (payload, args, context, info) =>
       groupWithComputedProps(payload.groupAdded, payload.users, context),
-  },
-
-  groupRemoved: {
-    subscribe: withFilter(
-      () => pubsub.asyncIterator(GROUP_REMOVED_TOPIC),
-      notifyUserIdsFilter
-    ),
   },
 };

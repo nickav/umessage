@@ -17,6 +17,7 @@ import {
 } from './auth';
 import createDatabase from './db';
 import enhancer, { schema, createContext, onOperation } from './data';
+import attachment from './attachment';
 
 /* */
 // Constants
@@ -79,7 +80,7 @@ async function init() {
   // Routes
   router.post(GRAPHQL_PATH, bodyParser(), middleware, enhancer(graphqlKoa));
   router.get(GRAPHQL_PATH, middleware, enhancer(graphqlKoa));
-  //router.get('/attachments/:id', )
+  router.get('/attachments/:id', attachment);
 
   app.use(router.routes());
   app.use(router.allowedMethods());

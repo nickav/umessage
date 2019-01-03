@@ -43,6 +43,7 @@
     "koa-jwt": "^3.3.2",
     "koa-router": "^7.4.0",
     "koa-simple-static": "^1.1.0",
+    "koa-static": "^5.0.0",
     "metascraper": "^3.11.5",
     "sqlite": "^3.0.0",
     "subscriptions-transport-ws": "^0.9.9"
