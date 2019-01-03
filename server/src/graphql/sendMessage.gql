@@ -1,0 +1,3 @@
+mutation sendMessage {
+  sendMessage(handleGuids: [], text: "hello")
+}

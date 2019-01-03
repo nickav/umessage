@@ -4,9 +4,7 @@ import { transformMessage } from './helpers';
 
 export default {
   handles: (_, args, ctx) =>
-    ctx.db.all(
-      `SELECT ROWID as id, id as username, country, service FROM handle;`
-    ),
+    ctx.db.all(`SELECT ROWID as id, id as guid, country, service FROM handle;`),
 
   chats: (_, args, ctx) =>
     ctx.db.all(`

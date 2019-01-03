@@ -1,4 +1,4 @@
-import { sendMessage } from '../../imessage';
+import { sendMessage } from '../imessage';
 
 export default {
   sendMessage(_, { handleGuids, text }, ctx) {

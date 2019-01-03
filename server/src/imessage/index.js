@@ -9,7 +9,13 @@ const escapeBash = (str) => `"${str.replace(/"/g, '\\"')}"`;
 const resolveScript = (name) => path.resolve(__dirname, `${name}.applescript`);
 
 export async function sendMessage(handleGuids, message) {
-  const handle = _.toArray(handleGuids).join(',');
+  const handles = _.toArray(handleGuids);
+
+  if (!handles.length) {
+    return Promise.reject('sendMessage: Must supply at least one handle.');
+  }
+
+  const handle = handles.join(',');
 
   const { stdout, stderr } = await exec(`
     osascript ${resolveScript('sendmessage')} ${escapeBash(
