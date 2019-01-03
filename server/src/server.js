@@ -2,11 +2,9 @@ import Koa from 'koa';
 import jwt from 'koa-jwt';
 import compose from 'koa-compose';
 import { ApolloServer } from 'apollo-server-koa';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { execute, subscribe } from 'graphql';
 import cors from '@koa/cors';
 
-import config from './config';
+//import config from './config';
 import {
   signInUser,
   authMiddleware,
@@ -14,7 +12,7 @@ import {
   isAuthenticated,
 } from './auth';
 import createDatabase from './db';
-import { schema, createContext, onOperation } from './data';
+import { schema, resolvers, createContext, onOperation } from './data';
 import attachment from './attachment';
 import poll from './poll';
 

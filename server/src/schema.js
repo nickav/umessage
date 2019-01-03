@@ -1,8 +1,6 @@
-import { makeExecutableSchema } from 'graphql-tools';
+import { gql } from 'apollo-server-koa';
 
-import Resolvers from './resolvers';
-
-const Schema = `
+export default gql`
   scalar Date
 
   # anything that can be paged in a PageResult
@@ -100,10 +98,3 @@ const Schema = `
     subscription: Subscription
   }
 `;
-
-const schema = makeExecutableSchema({
-  typeDefs: Schema,
-  resolvers: Resolvers,
-});
-
-export default schema;
