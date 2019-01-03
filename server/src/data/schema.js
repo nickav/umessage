@@ -18,19 +18,12 @@ const Schema = `
   type PageResult {
     cursor: String!
     items: [Pageable]!
-    pageInfo: PageInfo!
-  }
-
-  # Whether or not more pages exist in a paged query
-  type PageInfo {
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
   }
 
   # User object
   type Handle {
     id: Int!
-    username: String!
+    guid: String!
     country: String
     service: String
   }
@@ -42,6 +35,9 @@ const Schema = `
     text: String!
     date: Date!
     is_from_me: Boolean!
+
+    associated_message_guid: String
+    payload_data: String
 
     handle: Handle
     attachments: [Attachment]
@@ -61,6 +57,7 @@ const Schema = `
     id: Int!
     guid: String!
     created_date: Date!
+    filename: String!
     mime_type: String
     transfer_name: String
     total_bytes: Int
@@ -74,9 +71,13 @@ const Schema = `
   }
 
   type Query {
+    # get all chats
     chats: [Chat]
+
+    # get a certain chat
     chat(id: Int!): Chat
 
+    # get all handles
     handles: [Handle]
 
     # fetch metatags for a given url

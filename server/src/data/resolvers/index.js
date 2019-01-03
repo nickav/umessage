@@ -5,7 +5,6 @@ import Query from './Query';
 //import Subscription from './Subscription';
 import Chat from './Chat';
 import Message from './Message';
-import PageInfo from './PageInfo';
 import Pageable from './Pageable';
 
 export default {
@@ -18,6 +17,5 @@ export default {
   Chat,
   Message,
 
-  PageInfo,
   Pageable,
 };

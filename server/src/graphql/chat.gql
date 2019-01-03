@@ -1,0 +1,24 @@
+{
+  chat(id: 41) {
+    id
+    guid
+    chat_identifier
+
+    handles {
+      id
+      guid
+    }
+
+    messagePage(page: { count: 200 }) {
+      cursor
+      items {
+        ... on Message {
+          id
+          text
+          date
+          is_from_me
+        }
+      }
+    }
+  }
+}

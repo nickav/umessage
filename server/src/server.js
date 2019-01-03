@@ -79,6 +79,7 @@ async function init() {
   // Routes
   router.post(GRAPHQL_PATH, bodyParser(), middleware, enhancer(graphqlKoa));
   router.get(GRAPHQL_PATH, middleware, enhancer(graphqlKoa));
+  //router.get('/attachments/:id', )
 
   app.use(router.routes());
   app.use(router.allowedMethods());

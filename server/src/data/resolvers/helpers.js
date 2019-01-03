@@ -58,3 +58,13 @@ export const transformMessage = (message) => ({
   ...message,
   date: fromAppleTime(message.date),
 });
+
+// convert cursor to id
+export const fromCursor = (str) => Buffer.from(str, 'base64').toString();
+
+// convert id to cursor
+export const toCursor = (val) => Buffer.from(val.toString()).toString('base64');
+
+export const fromSortCursor = (cursor) => +fromCursor(cursor);
+
+export const toSortCursor = (item) => (item ? toCursor(`${item.id}`) : null);
