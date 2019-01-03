@@ -14,10 +14,7 @@ export default {
     return ctx.db
       .all(
         `
-        SELECT ROWID as id, guid, text, date, is_from_me,
-          cache_has_attachments, handle_id, chat_message_join.chat_id,
-          associated_message_guid
-        FROM message
+        SELECT ${db.getMessageProps()} from message
         JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
         WHERE chat_message_join.chat_id = ${chat.id}
         ${page.cursor ? 'AND ROWID < ' + fromSortCursor(page.cursor) : ''}

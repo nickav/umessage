@@ -16,8 +16,7 @@ export default function createLoaders(ctx) {
       db
         .all(
           `
-          SELECT ROWID as id, id as guid, country, service
-          FROM handle
+          SELECT ${db.getHandleProps()} FROM handle
           WHERE ROWID in (${ids.join(', ')});
         `
         )
@@ -28,7 +27,7 @@ export default function createLoaders(ctx) {
       return db
         .all(
           `
-           SELECT ROWID as id, id as guid, country, service, chat_id
+           SELECT ${db.getHandleProps()}, chat_id
            FROM handle
            JOIN chat_handle_join ON chat_handle_join.handle_id = handle.ROWID
            WHERE chat_id IN (${chatIds.join(', ')});
@@ -44,10 +43,7 @@ export default function createLoaders(ctx) {
       return db
         .all(
           `
-          SELECT ROWID as id, guid, text, date, is_from_me,
-            cache_has_attachments, handle_id, chat_message_join.chat_id,
-            associated_message_guid
-          FROM message
+          SELECT ${db.getMessageProps()} FROM message
           JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
           WHERE chat_message_join.chat_id IN (${chatIds.join(', ')})
           GROUP BY chat_id
@@ -69,9 +65,7 @@ export default function createLoaders(ctx) {
       return db
         .all(
           `
-        SELECT ROWID as id, guid, created_date, mime_type, transfer_name,
-          filename, is_outgoing, total_bytes, hide_attachment, message_id
-        FROM attachment
+        SELECT ${db.getAttachmentProps()} FROM attachment
         JOIN message_attachment_join ON attachment.ROWID = message_attachment_join.attachment_id
         WHERE message_id IN (${messageIds.join(', ')});
         `
