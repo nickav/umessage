@@ -43,7 +43,7 @@ export default function createLoaders(ctx) {
       return db
         .all(
           `
-          SELECT ${db.getMessageProps()} FROM message
+          SELECT ${db.getMessageProps()}, chat_id FROM message
           JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
           WHERE chat_message_join.chat_id IN (${chatIds.join(', ')})
           GROUP BY chat_id
@@ -65,7 +65,7 @@ export default function createLoaders(ctx) {
       return db
         .all(
           `
-        SELECT ${db.getAttachmentProps()} FROM attachment
+        SELECT ${db.getAttachmentProps()}, message_id FROM attachment
         JOIN message_attachment_join ON attachment.ROWID = message_attachment_join.attachment_id
         WHERE message_id IN (${messageIds.join(', ')});
         `

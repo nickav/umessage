@@ -1,33 +1,41 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
-//import { ApolloProvider } from 'react-apollo';
-//import client from '@/store/client';
+import {
+  createStackNavigator,
+  createAppContainer,
+  addNavigationHelpers,
+} from 'react-navigation';
+import { ApolloProvider } from 'react-apollo';
+import client from '@/store/client';
 
 import * as pages from '@/components/pages';
 
 import styles from './App.scss';
 
-const App = createAppContainer(
-  createStackNavigator(
-    {
-      Home: { screen: pages.Home },
-      Chat: { screen: pages.Chat },
-    },
-    {
-      defaultNavigationOptions: {
-        headerStyle: styles.Header,
-        headerTitleStyle: styles.Title,
-      },
-      headerMode: 'none',
-    }
-  )
-);
+const routes = {
+  Home: { screen: pages.Home },
+  Chat: { screen: pages.Chat },
+};
 
-class AppContainer extends React.Component {
+const Navigator = createStackNavigator(routes, {
+  defaultNavigationOptions: {
+    headerStyle: styles.Header,
+    headerTitleStyle: styles.Title,
+  },
+  headerMode: 'none',
+});
+
+const AppContainer = createAppContainer(Navigator);
+
+class App extends React.Component {
   render() {
-    return <App />;
+    const { props } = this;
+
+    return (
+      <ApolloProvider client={client}>
+        <AppContainer />
+      </ApolloProvider>
+    );
   }
 }
 
-export default AppContainer;
+export default App;

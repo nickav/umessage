@@ -9,6 +9,7 @@
       "alias": {
         "@": "./src"
       }
-    }]
+    }],
+    "graphql-tag"
   ]
 }

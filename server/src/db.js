@@ -40,8 +40,7 @@ async function createDatabase() {
     attachment.filename,
     attachment.is_outgoing,
     attachment.total_bytes,
-    attachment.hide_attachment,
-    attachment.message_id
+    attachment.hide_attachment
   `;
 
   return db;

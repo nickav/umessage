@@ -1,5 +1,8 @@
 import React from 'react';
 import { Text, View, Button, FlatList } from 'react-native';
+import { Query } from 'react-apollo';
+
+import { CHAT_FEED } from '@/store/chat';
 
 import styles from './Home.scss';
 
@@ -15,6 +18,14 @@ export default class Home extends React.Component {
       <View style={styles.Home}>
         <Text style={styles.text}>Home Page, doggy!</Text>
         <Button title="Go to Chat" onPress={() => navigate('Chat')} />
+
+        <Query query={CHAT_FEED}>
+          {({ loading, error, data }) => (
+            <Text style={styles.text}>
+              {JSON.stringify({ loading, error, data })}
+            </Text>
+          )}
+        </Query>
         <FlatList
           data={[
             { key: 'Devin' },

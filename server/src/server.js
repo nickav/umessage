@@ -50,7 +50,7 @@ async function init() {
   });
 
   // Start Server:
-  const httpServer = app.listen({ port: PORT }, () => {
+  const httpServer = app.listen({ host: '0.0.0.0', port: PORT }, () => {
     console.log(
       `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
     );
@@ -61,7 +61,7 @@ async function init() {
   server.installSubscriptionHandlers(httpServer);
 
   // Start background polling:
-  poll(app.context);
+  //poll(app.context);
 }
 
 export default init;
