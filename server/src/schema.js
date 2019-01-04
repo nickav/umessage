@@ -3,6 +3,8 @@ import { gql } from 'apollo-server-koa';
 export default gql`
   scalar Date
 
+  directive @auth on FIELD_DEFINITION
+
   # anything that can be paged in a PageResult
   union Pageable = Chat | Message
 
@@ -73,26 +75,26 @@ export default gql`
     auth(email: String!, password: String!): String
 
     # get all chats
-    chats: [Chat]
+    chats: [Chat] @auth
 
     # get a certain chat
-    chat(id: Int!): Chat
+    chat(id: Int!): Chat @auth
 
     # get all handles
-    handles: [Handle]
+    handles: [Handle] @auth
 
     # fetch metatags for a given url
-    metatags(url: String!): MetaInfo
+    metatags(url: String!): MetaInfo @auth
   }
 
   type Mutation {
     # create a new message
-    sendMessage(handleGuids: [String]!, text: String!): Boolean!
+    sendMessage(handleGuids: [String]!, text: String!): Boolean! @auth
   }
 
   type Subscription {
     # called when a new message is added
-    messageAdded: Message
+    messageAdded: Message @auth
   }
 
   schema {

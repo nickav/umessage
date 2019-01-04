@@ -1,15 +1,9 @@
-import { makeExecutableSchema } from 'graphql-tools';
-
-import Schema from './schema';
-import Resolvers from './resolvers';
 import createLoaders from './loaders';
 
 export { default as createLoaders } from './loaders';
-
-export const schema = makeExecutableSchema({
-  typeDefs: Schema,
-  resolvers: Resolvers,
-});
+export { default as schemaDirectives } from './directives';
+export { default as typeDefs } from './schema';
+export { default as resolvers } from './resolvers';
 
 export const createContext = (ctx) => ({
   db: ctx.db,

@@ -5,9 +5,9 @@ import { ApolloServer } from 'apollo-server-koa';
 import cors from '@koa/cors';
 
 import config from './config';
-import { authMiddleware } from './auth';
+import { getUserFromJwt } from './auth';
 import createDatabase from './db';
-import { schema, resolvers, createContext, onOperation } from './data';
+import { typeDefs, resolvers, schemaDirectives, createContext } from './data';
 import attachment from './attachment';
 import poll from './poll';
 
@@ -23,7 +23,6 @@ async function init() {
 
   const middleware = compose([
     jwt({ secret: config.JWT_SECRET, passthrough: true }),
-    authMiddleware,
   ]);
 
   app.use(middleware);
@@ -31,8 +30,22 @@ async function init() {
 
   // Create Apollo Server:
   const server = new ApolloServer({
-    schema,
-    context: ({ ctx, ...rest }) => createContext(app.context),
+    typeDefs,
+    resolvers,
+    schemaDirectives,
+    context: ({ ctx, connection }) => {
+      return createContext({
+        ...app.context,
+        user: connection ? connection.context.user : ctx.state.user,
+      });
+    },
+    subscriptions: {
+      onConnect: (params, webSocket) => {
+        return getUserFromJwt(app.context, params.token).then((user) => ({
+          user,
+        }));
+      },
+    },
     tracing: process.env.NODE_ENV === 'development',
   });
 

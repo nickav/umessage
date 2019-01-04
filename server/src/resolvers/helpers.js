@@ -1,17 +1,3 @@
-import { combineResolvers } from 'graphql-resolvers';
-import _ from 'hibar';
-
-export const isAuthenticated = (root, args, context, info) => {
-  if (!context.user) {
-    return context.throw(401, 'Unauthorized');
-  }
-};
-
-export const auth = (...fns) => combineResolvers(isAuthenticated, ...fns);
-
-export const authResolver = (...fns) => (obj) =>
-  _.mapValues(obj, (v) => auth(...fns, v));
-
 export const arrayEquals = (a1, a2, orderDependent = false) => {
   if (!orderDependent) {
     a1 = a1.slice().sort();
