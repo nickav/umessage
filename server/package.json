@@ -25,6 +25,7 @@
   "dependencies": {
     "@koa/cors": "^2.2.3",
     "apollo-server-koa": "^2.3.1",
+    "bcrypt": "^3.0.3",
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
     "got": "^9.5.0",

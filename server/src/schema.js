@@ -69,6 +69,9 @@ export default gql`
   }
 
   type Query {
+    # sign in user
+    auth(email: String!, password: String!): String
+
     # get all chats
     chats: [Chat]
 

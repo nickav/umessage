@@ -1,24 +1,30 @@
+import { promisify } from 'util';
 import _ from 'hibar';
+import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 
 import config from './config';
 
-export function signInUser(ctx, id) {
-  return ctx.db.User.findOne({ where: { id } }).then((user) => {
-    const data = { id };
+export const authUser = (ctx, { email, password }) => {
+  if (config.USER_EMAIL === email) {
+    return bcrypt.compare(password, config.USER_PASSWORD).then((valid) => {
+      if (!valid) return Promise.resolve(null);
 
-    return jsonwebtoken.sign(data, config.JWT_SECRET);
-  });
-}
+      const data = { email };
+      return promisify(jsonwebtoken.sign)(data, config.JWT_SECRET);
+    });
+  }
 
-export function userFromJWT(db, jwt) {
+  return Promise.resolve(null);
+};
+
+export function getUserFromJwt(ctx, jwt) {
   if (typeof jwt === 'string') {
     jwt = jsonwebtoken.decode(jwt, config.JWT_SECRET);
   }
 
   if (jwt) {
-    const { id } = jwt;
-    return db.User.findOne({ where: { id } });
+    return jwt;
   }
 
   return Promise.resolve(null);
@@ -30,6 +36,6 @@ export const isAuthenticated = (userPromise) =>
   );
 
 export async function authMiddleware(ctx, next) {
-  ctx.user = await userFromJWT(ctx.db, ctx.state.user);
+  ctx.user = await getUserFromJwt(ctx, ctx.state.user);
   return next();
 }

@@ -1,10 +1,12 @@
 import metascraper from 'metascraper';
 import got from 'got';
-import { transformMessage } from './helpers';
+import { auth, transformMessage } from './helpers';
+import { authUser } from '../auth';
 
 export default {
-  handles: (_, args, { db }) =>
-    db.all(`SELECT ${db.getHandleProps()} FROM handle;`),
+  handles: auth((_, args, { db }) =>
+    db.all(`SELECT ${db.getHandleProps()} FROM handle;`)
+  ),
 
   chats: (_, args, { db }) =>
     db.all(`
@@ -23,4 +25,6 @@ export default {
 
   metatags: (_, args, ctx) =>
     got(args.url).then(({ body: html, url }) => metascraper({ html, url })),
+
+  auth: (_, args, ctx) => authUser(ctx, args),
 };

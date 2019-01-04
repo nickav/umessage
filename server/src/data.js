@@ -14,5 +14,6 @@ export const schema = makeExecutableSchema({
 export const createContext = (ctx) => ({
   db: ctx.db,
   user: ctx.user,
+  throw: ctx.throw,
   loaders: createLoaders(ctx),
 });

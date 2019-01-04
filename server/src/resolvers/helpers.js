@@ -3,7 +3,7 @@ import _ from 'hibar';
 
 export const isAuthenticated = (root, args, context, info) => {
   if (!context.user) {
-    return new Error('Unauthorized');
+    return context.throw(401, 'Unauthorized');
   }
 };
 

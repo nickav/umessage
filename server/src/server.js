@@ -4,13 +4,8 @@ import compose from 'koa-compose';
 import { ApolloServer } from 'apollo-server-koa';
 import cors from '@koa/cors';
 
-//import config from './config';
-import {
-  signInUser,
-  authMiddleware,
-  userFromJWT,
-  isAuthenticated,
-} from './auth';
+import config from './config';
+import { authMiddleware } from './auth';
 import createDatabase from './db';
 import { schema, resolvers, createContext, onOperation } from './data';
 import attachment from './attachment';
@@ -25,6 +20,13 @@ async function init() {
   // Create Koa Server:
   const app = new Koa();
   app.context.db = await createDatabase();
+
+  const middleware = compose([
+    jwt({ secret: config.JWT_SECRET, passthrough: true }),
+    authMiddleware,
+  ]);
+
+  app.use(middleware);
   app.use(cors());
 
   // Create Apollo Server:
@@ -33,13 +35,6 @@ async function init() {
     context: ({ ctx, ...rest }) => createContext(app.context),
     tracing: process.env.NODE_ENV === 'development',
   });
-
-  /*
-  const middleware = compose([
-    //jwt({ secret: config.JWT_SECRET, passthrough: true }),
-    //authMiddleware
-  ]);
-  */
 
   // Start Server:
   const httpServer = app.listen({ port: PORT }, () => {
