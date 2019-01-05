@@ -18,3 +18,14 @@
 .me {
   color: #888;
 }
+
+.Composer {
+  display: flex;
+  flex-direction: row;
+}
+
+.input {
+  width: 100%;
+  color: #fff;
+  flex: 1;
+}

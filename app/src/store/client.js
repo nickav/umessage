@@ -28,10 +28,12 @@ export const createClient = ({ API_URL, WS_URL }) => {
 
   const cache = new InMemoryCache();
 
+  /*
   persistCache({
     cache,
     storage: AsyncStorage,
   });
+  */
 
   const stateLink = withClientState({
     cache,

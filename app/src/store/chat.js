@@ -33,7 +33,7 @@ export const CHAT_FEED = gql`
 `;
 
 export const CHAT_MESSAGES = gql`
-  query ($id: Int!, $page: PageInput = {}) {
+  query($id: Int!, $page: PageInput = {}) {
     chat(id: $id) {
       id
       guid
@@ -62,5 +62,11 @@ export const CHAT_MESSAGES = gql`
         }
       }
     }
+  }
+`;
+
+export const SEND_MESSSAGE = gql`
+  mutation($handleGuids: [String]!, $text: String!) {
+    sendMessage(handleGuids: $handleGuids, text: $text)
   }
 `;

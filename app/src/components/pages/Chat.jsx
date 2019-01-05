@@ -1,10 +1,18 @@
 import React from 'react';
-import { Text, View, FlatList, Image } from 'react-native';
-import { Query } from 'react-apollo';
+import {
+  Text,
+  View,
+  Button,
+  FlatList,
+  Image,
+  KeyboardAvoidingView,
+} from 'react-native';
+import { Query, Mutation } from 'react-apollo';
 
 import styles from './Chat.scss';
 import Header from '@/components/common/Header';
-import { CHAT_MESSAGES } from '@/store/chat';
+import TextInput from '@/components/common/TextInput';
+import { CHAT_MESSAGES, SEND_MESSSAGE } from '@/store/chat';
 
 export default class Chat extends React.Component {
   static navigationOptions = {
@@ -25,29 +33,67 @@ export default class Chat extends React.Component {
     </View>
   );
 
+  state = {
+    text: '',
+  };
+
   render() {
     const { state, goBack } = this.props.navigation;
 
-    const { id } = state.params.item;
+    const { text } = this.state;
+
+    const { id, handles } = state.params.item;
 
     return (
       <View style={styles.Chat}>
         <Header />
 
-        <Query query={CHAT_MESSAGES} variables={{ id }}>
-          {({ loading, error, data }) =>
-            data.chat ? (
-              <FlatList
-                inverted
-                data={data.chat.messagePage.items}
-                renderItem={({ item }) => <Chat.Message {...item} />}
-                keyExtractor={(item, i) => item.id.toString()}
-              />
-            ) : (
-              <Text>Loading...</Text>
-            )
-          }
-        </Query>
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <Query query={CHAT_MESSAGES} variables={{ id }}>
+            {({ loading, error, data }) =>
+              data.chat ? (
+                <FlatList
+                  inverted
+                  data={data.chat.messagePage.items}
+                  renderItem={({ item }) => <Chat.Message {...item} />}
+                  keyExtractor={(item, i) => item.id.toString()}
+                />
+              ) : (
+                <Text>Loading...</Text>
+              )
+            }
+          </Query>
+
+          <Mutation mutation={SEND_MESSSAGE}>
+            {(sendMessage) => (
+              <View style={styles.Composer}>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) => this.setState({ text })}
+                  value={text}
+                  multiline
+                />
+                <Button
+                  title="Send"
+                  onPress={() => {
+                    if (!text.trim().length) {
+                      return;
+                    }
+
+                    sendMessage({
+                      variables: {
+                        handleGuids: handles.map((e) => e.guid),
+                        text,
+                      },
+                    });
+
+                    this.setState({ text: '' });
+                  }}
+                />
+              </View>
+            )}
+          </Mutation>
+        </KeyboardAvoidingView>
       </View>
     );
   }
