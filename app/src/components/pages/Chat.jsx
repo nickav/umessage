@@ -50,10 +50,12 @@ export default class Chat extends React.Component {
 
         <KeyboardAvoidingView behavior="padding" enabled>
           <Query query={CHAT_MESSAGES} variables={{ id }}>
-            {({ loading, error, data }) =>
+            {({ loading, error, data, refetch }) =>
               data.chat ? (
                 <FlatList
                   inverted
+                  refreshing={data.networkStatus === 4}
+                  onRefresh={() => refetch()}
                   data={data.chat.messagePage.items}
                   renderItem={({ item }) => <Chat.Message {...item} />}
                   keyExtractor={(item, i) => item.id.toString()}
