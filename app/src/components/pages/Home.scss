@@ -1,10 +1,20 @@
 .Home {
-  flex: 1;
-  background-color: #000;
+  display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
+
+  background-color: #000;
 }
 
 .text {
   color: #fff;
+}
+
+.Chat {
+  background: #000;
+}
+
+.inner {
+  padding: 12px 32px;
 }
