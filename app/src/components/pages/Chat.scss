@@ -1,3 +1,16 @@
 .Chat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+
   background-color: #000;
+}
+
+.text {
+  color: #fff;
+}
+
+.Message {
+  padding: 12px 32px;
 }

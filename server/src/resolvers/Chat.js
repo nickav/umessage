@@ -2,6 +2,7 @@ import { toSortCursor, fromSortCursor, fromAppleTime } from './helpers';
 
 export default {
   messagePage: (chat, args, ctx) => {
+    const { db } = ctx;
     const { page } = args;
 
     if (page.count === 1 && !page.cursor) {
@@ -11,7 +12,7 @@ export default {
       }));
     }
 
-    return ctx.db
+    return db
       .all(
         `
         SELECT ${db.getMessageProps()} from message
