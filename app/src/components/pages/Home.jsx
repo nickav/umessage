@@ -28,7 +28,7 @@ export default class Home extends React.Component {
         )}
       >
         <View style={styles.inner}>
-          <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
             {handles.map((h) => h.guid).join(', ')}
           </Text>
           <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">

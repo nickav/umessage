@@ -2,8 +2,10 @@ import path from 'path';
 import os from 'os';
 import send from 'koa-send';
 
-async function getAttachment(ctx, next) {
-  const attachment = await ctx.db.get(`
+async function getAttachment(ctx) {
+  const { db } = ctx;
+
+  const attachment = await db.get(`
     SELECT ${db.getAttachmentProps()} FROM attachment
     WHERE ROWID = ${ctx.params.id};
   `);

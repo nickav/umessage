@@ -32,7 +32,7 @@ export const CHAT_FEED = gql`
   }
 `;
 
-export const GET_CHAT = gql`
+export const CHAT_MESSAGES = gql`
   query ($id: Int!, $page: PageInput = {}) {
     chat(id: $id) {
       id

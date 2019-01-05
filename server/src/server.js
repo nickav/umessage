@@ -1,8 +1,9 @@
 import Koa from 'koa';
 import jwt from 'koa-jwt';
+import Router from 'koa-router';
 import compose from 'koa-compose';
-import { ApolloServer } from 'apollo-server-koa';
 import cors from '@koa/cors';
+import { ApolloServer } from 'apollo-server-koa';
 
 import config from './config';
 import { getUserFromJwt } from './auth';
@@ -19,7 +20,11 @@ const GRAPHQL_PATH = '/graphql';
 async function init() {
   // Create Koa Server:
   const app = new Koa();
+  const router = new Router();
+
   app.context.db = await createDatabase();
+
+  router.get('/attachments/:id', attachment);
 
   const middleware = compose([
     jwt({ secret: config.JWT_SECRET, passthrough: true }),
@@ -27,6 +32,8 @@ async function init() {
 
   app.use(middleware);
   app.use(cors());
+  app.use(router.routes());
+  app.use(router.allowedMethods());
 
   // Create Apollo Server:
   const server = new ApolloServer({
