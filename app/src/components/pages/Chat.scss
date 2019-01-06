@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   flex: 1;
 
   background-color: #000;
@@ -13,6 +14,11 @@
 
 .Message {
   padding: 12px 32px;
+  width: 100%;
+}
+
+.Messages {
+  flex-grow: 1;
 }
 
 .me {
@@ -22,10 +28,13 @@
 .Composer {
   display: flex;
   flex-direction: row;
+  margin-top: auto;
+  width: 100%;
 }
 
 .input {
   width: 100%;
+  height: 100%;
   color: #fff;
   flex: 1;
 }

@@ -2,9 +2,13 @@ import React from 'react';
 import { TextInput } from 'react-native';
 
 export default class AutoTextInput extends React.Component {
-  state = {
-    height: 40,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      height: (props.style || {}).height
+    };
+  }
 
   updateSize = (height) => {
     this.setState({ height });
@@ -14,10 +18,6 @@ export default class AutoTextInput extends React.Component {
     const { props } = this;
     const { height } = this.state;
 
-    const style = {
-      height,
-    };
-
     return (
       <TextInput
         editable
@@ -26,7 +26,7 @@ export default class AutoTextInput extends React.Component {
           this.updateSize(e.nativeEvent.contentSize.height)
         }
         {...props}
-        style={[style, props.style]}
+        style={[{ height }, props.style]}
       />
     );
   }

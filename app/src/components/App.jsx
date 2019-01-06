@@ -20,8 +20,9 @@ const Navigator = createStackNavigator(routes, {
   defaultNavigationOptions: {
     headerStyle: styles.Header,
     headerTitleStyle: styles.Title,
+    headerTintColor: '#fff'
   },
-  headerMode: 'none',
+  //headerMode: 'none',
 });
 
 const AppContainer = createAppContainer(Navigator);

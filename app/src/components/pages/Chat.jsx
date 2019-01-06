@@ -15,9 +15,9 @@ import TextInput from '@/components/common/TextInput';
 import { CHAT_MESSAGES, SEND_MESSSAGE } from '@/store/chat';
 
 export default class Chat extends React.Component {
-  static navigationOptions = {
-    title: 'Chat',
-  };
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.state.params.item.handles.map(e => e.guid).join(', '),
+  });
 
   static Message = ({ id, text, date, is_from_me, attachments }) => (
     <View style={[styles.Message]}>
@@ -37,8 +37,14 @@ export default class Chat extends React.Component {
     text: '',
   };
 
+  componentDidMount() {
+    const { state } = this.props.navigation;
+    const { id, handles } = state.params.item;
+    const title = handles.map((e) => e.guid).join(', ');
+  }
+
   render() {
-    const { state, goBack } = this.props.navigation;
+    const { state } = this.props.navigation;
 
     const { text } = this.state;
 
@@ -48,7 +54,11 @@ export default class Chat extends React.Component {
       <View style={styles.Chat}>
         <Header />
 
-        <KeyboardAvoidingView behavior="padding" enabled>
+        <KeyboardAvoidingView
+          style={styles.Messages}
+          behavior="padding"
+          enabled
+        >
           <Query query={CHAT_MESSAGES} variables={{ id }}>
             {({ loading, error, data, refetch }) =>
               data.chat ? (
