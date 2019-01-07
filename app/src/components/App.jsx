@@ -5,7 +5,14 @@ import {
   addNavigationHelpers,
 } from 'react-navigation';
 import { ApolloProvider } from 'react-apollo';
+import { Contacts, Permissions } from 'expo';
 import client from '@/store/client';
+
+/*
+Permissions.askAsync(Expo.Permissions.CONTACTS).then(() =>
+  Contacts.getContactsAsync().then(console.log)
+);
+*/
 
 import * as pages from '@/components/pages';
 
@@ -20,7 +27,7 @@ const Navigator = createStackNavigator(routes, {
   defaultNavigationOptions: {
     headerStyle: styles.Header,
     headerTitleStyle: styles.Title,
-    headerTintColor: '#fff'
+    headerTintColor: '#fff',
   },
   //headerMode: 'none',
 });

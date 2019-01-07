@@ -7,7 +7,9 @@
       "cwd": "babelrc",
       "root": ["./"],
       "alias": {
-        "@": "./src"
+        "@": "./src",
+        "@cmp": "./src/components",
+        "@pub": "./public",
       }
     }],
     "graphql-tag"

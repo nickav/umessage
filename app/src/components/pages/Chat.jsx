@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { Query, Mutation } from 'react-apollo';
+import { Linking, TouchableHighlight } from 'react-native';
 
 import styles from './Chat.scss';
 import Header from '@/components/common/Header';
@@ -15,9 +16,22 @@ import TextInput from '@/components/common/TextInput';
 import { CHAT_MESSAGES, SEND_MESSSAGE } from '@/store/chat';
 
 export default class Chat extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.item.handles.map(e => e.guid).join(', '),
-  });
+  static navigationOptions = ({ navigation }) => {
+    const { handles } = navigation.state.params.item || {};
+    return {
+      title: handles.map((e) => e.guid).join(', '),
+      headerRight: (
+        <TouchableHighlight
+          onPress={() => Linking.openURL(`tel:${handles[0].guid}`)}
+        >
+          <Image
+            source={require('./call.png')}
+            style={{ width: 24, height: 24 }}
+          />
+        </TouchableHighlight>
+      ),
+    };
+  };
 
   static Message = ({ id, text, date, is_from_me, attachments }) => (
     <View style={[styles.Message]}>
@@ -36,12 +50,6 @@ export default class Chat extends React.Component {
   state = {
     text: '',
   };
-
-  componentDidMount() {
-    const { state } = this.props.navigation;
-    const { id, handles } = state.params.item;
-    const title = handles.map((e) => e.guid).join(', ');
-  }
 
   render() {
     const { state } = this.props.navigation;
