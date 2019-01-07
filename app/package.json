@@ -1,11 +1,11 @@
 {
-  "main": "src/index.js",
+  "name": "umessage",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "eject": "expo eject"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.3.12",
@@ -17,20 +17,22 @@
     "apollo-link-state": "^0.4.2",
     "apollo-link-ws": "^1.0.12",
     "apollo-utilities": "^1.0.27",
-    "babel-plugin-graphql-tag": "^1.6.0",
     "dayjs": "^1.7.8",
-    "expo": "^31.0.2",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
-    "react": "16.5.0",
+    "react": "16.6.3",
     "react-apollo": "^2.3.3",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-native": "0.57.8",
+    "react-native-gesture-handler": "^1.0.12",
     "react-navigation": "^3.0.9",
     "subscriptions-transport-ws": "^0.9.15"
   },
   "devDependencies": {
+    "babel-plugin-graphql-tag": "^1.6.0",
     "babel-plugin-module-resolver": "^3.1.1",
-    "babel-preset-expo": "^5.0.0",
+    "babel-plugin-react-native-classname-to-style": "^1.2.1",
+    "babel-plugin-react-native-platform-specific-extensions": "^1.1.1",
+    "metro-react-native-babel-preset": "0.51.1",
     "node-sass": "^4.11.0",
     "react-native-sass-transformer": "^1.3.1"
   },

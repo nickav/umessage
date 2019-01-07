@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, PixelRatio } from 'react-native';
-import { Constants } from 'expo';
 
 import styles from './Header.scss';
 

@@ -1,37 +1,4 @@
 {
-  "expo": {
-    "name": "umessage",
-    "slug": "umessage",
-    "privacy": "public",
-    "sdkVersion": "31.0.0",
-    "platforms": [
-      "ios",
-      "android"
-    ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.umessage"
-    },
-    "android": {
-      "package": "com.yourcompany.umessage"
-    },
-    "packagerOpts": {
-      "sourceExts": ["js", "jsx", "scss", "sass"],
-      "transformer": "node_modules/react-native-sass-transformer/index.js"
-    }
-  }
+  "name": "umessage",
+  "displayName": "umessage"
 }
