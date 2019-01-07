@@ -17,9 +17,9 @@ import { CHAT_MESSAGES, SEND_MESSSAGE } from '@/store/chat';
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => {
-    const { handles } = navigation.state.params.item || {};
+    const { handles, display_name } = navigation.state.params.item || {};
     return {
-      title: handles.map((e) => e.guid).join(', '),
+      title: display_name || handles.map((e) => e.guid).join(', '),
       headerRight: (
         <TouchableHighlight
           onPress={() => Linking.openURL(`tel:${handles[0].guid}`)}

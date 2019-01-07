@@ -48,6 +48,7 @@ export default gql`
     id: Int!
     guid: String!
     chat_identifier: String!
+    display_name: String
 
     handles: [Handle]
     messagePage(page: PageInput = {}): PageResult

@@ -1,15 +1,33 @@
 import React from 'react';
+import { PermissionsAndroid } from 'react-native';
 import {
   createStackNavigator,
   createAppContainer,
   addNavigationHelpers,
 } from 'react-navigation';
 import { ApolloProvider } from 'react-apollo';
-import client from '@/store/client';
+import Contacts from 'react-native-contacts';
 
+import client from '@/store/client';
 import * as pages from '@/components/pages';
 
 import styles from './App.scss';
+
+/*
+PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS).then(
+  (enabled) => {
+    Contacts.getAll((err, contacts) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      phoneNumbers[].number, givenName, middleName, familyName
+      console.log(contacts);
+    });
+  }
+);
+*/
 
 const routes = {
   Home: { screen: pages.Home },

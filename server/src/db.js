@@ -28,7 +28,8 @@ async function createDatabase() {
   db.getChatProps = () => `
     chat.ROWID as id,
     chat.guid,
-    chat.chat_identifier
+    chat.chat_identifier,
+    chat.display_name
   `;
 
   db.getAttachmentProps = () => `

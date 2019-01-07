@@ -5,6 +5,7 @@ export const CHAT_FEED = gql`
     chats {
       id
       guid
+      display_name
 
       handles {
         id
@@ -37,7 +38,7 @@ export const CHAT_MESSAGES = gql`
     chat(id: $id) {
       id
       guid
-      chat_identifier
+      display_name
 
       handles {
         id

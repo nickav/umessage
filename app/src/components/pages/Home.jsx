@@ -18,7 +18,7 @@ export default class Home extends React.Component {
     title: 'Messages',
   };
 
-  static Chat = ({ id, handles, messagePage, onPress }) => (
+  static Chat = ({ id, display_name, messagePage, onPress }) => (
     <View style={styles.Chat}>
       <TouchableNativeFeedback
         onPress={onPress}
@@ -29,7 +29,7 @@ export default class Home extends React.Component {
       >
         <View style={styles.inner}>
           <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-            {handles.map((h) => h.guid).join(', ')}
+            {display_name}
           </Text>
           <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
             {messagePage.items[0].text}
@@ -53,6 +53,10 @@ export default class Home extends React.Component {
               renderItem={({ item }) => (
                 <Home.Chat
                   {...item}
+                  display_name={
+                    item.display_name ||
+                    item.handles.map((e) => e.guid).join(', ')
+                  }
                   onPress={() => navigate('Chat', { item })}
                 />
               )}
