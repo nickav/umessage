@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "umessage",
+    "slug": "umessage",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": [
@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.umessage"
+    },
+    "android": {
+      "package": "com.yourcompany.umessage"
     },
     "packagerOpts": {
       "sourceExts": ["js", "jsx", "scss", "sass"],

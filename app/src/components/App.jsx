@@ -10,7 +10,7 @@ import client from '@/store/client';
 
 /*
 Permissions.askAsync(Expo.Permissions.CONTACTS).then(() =>
-  Contacts.getContactsAsync().then(console.log)
+  Contacts.getContactsAsync({ pageSize: 0 }).then(console.log)
 );
 */
 
