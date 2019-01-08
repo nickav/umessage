@@ -81,3 +81,35 @@ export const SEND_MESSSAGE = gql`
     }
   }
 `;
+
+export const handleNewMessage = (cache, message, chatId) => {
+  console.log('handleNewMessage', message, chatId);
+
+  // update individual chat
+  cache.readWriteQuery({
+    query: CHAT_MESSAGES,
+    variables: {
+      id: chatId,
+      page: { size: MESSAGES_PER_PAGE },
+    },
+    data: (data) => {
+      data.chat.messagePage.items = data.chat.messagePage.items.filter(
+        (e) => e.id > 0
+      );
+      data.chat.messagePage.items.unshift(message);
+    },
+  });
+
+  // update list of chats
+  cache.readWriteQuery({
+    query: CHAT_FEED,
+    variables: {},
+    data: (data) => {
+      const index = data.chats.findIndex((chat) => chat.id === chatId);
+
+      if (index >= 0) {
+        data.chats[index].messagePage.items = [message];
+      }
+    },
+  });
+};

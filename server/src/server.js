@@ -48,6 +48,9 @@ async function init() {
     },
     subscriptions: {
       onConnect: (params, webSocket) => {
+        console.log('--- Connected to client using token:', !!params.token);
+
+        return;
         return getUserFromJwt(app.context, params.token).then((user) => ({
           user,
         }));
@@ -68,7 +71,7 @@ async function init() {
   server.installSubscriptionHandlers(httpServer);
 
   // Start background polling:
-  //poll(app.context);
+  poll(app.context, { interval: 2000 });
 }
 
 export default init;

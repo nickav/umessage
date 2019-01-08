@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const MESSAGE_ADDED = gql`
+export const MESSAGE_ADDED = gql`
   subscription {
     messageAdded {
       id

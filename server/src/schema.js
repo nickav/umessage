@@ -94,7 +94,7 @@ export default gql`
 
   type Subscription {
     # called when a new message is added
-    messageAdded: Message @auth
+    messageAdded: Message
   }
 
   schema {

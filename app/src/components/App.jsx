@@ -1,4 +1,5 @@
 import React from 'react';
+import { AppState } from 'react-native';
 import {
   createStackNavigator,
   createAppContainer,
@@ -7,6 +8,7 @@ import {
 import { ApolloProvider } from 'react-apollo';
 
 import client from '@/store/client';
+import * as subscriptions from '@/store/subs';
 import * as pages from '@/components/pages';
 
 import styles from './App.scss';
@@ -31,6 +33,21 @@ const Navigator = createStackNavigator(routes, {
 const AppContainer = createAppContainer(Navigator);
 
 class App extends React.Component {
+  componentDidMount() {
+    AppState.addEventListener('change', this.onAppStateChange);
+  }
+
+  onAppStateChange = (appState) => {
+    if (this.subs) subscriptions.unsubscribe(this.subs);
+    this.subs = subscriptions.subscribe(client);
+
+    console.log('onAppStateChange', appState);
+  };
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.onAppStateChange);
+  }
+
   render() {
     const { props } = this;
 

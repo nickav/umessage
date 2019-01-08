@@ -38,15 +38,18 @@ const cacheEnhancer = (cache) => {
 };
 
 export const createClient = (API_URL) => {
+  const WS_URL = API_URL.replace(/^https?:\/\//, 'ws://');
+
   const httpLink = new HttpLink({ uri: API_URL });
 
   const wsLink = new WebSocketLink({
-    uri: API_URL.replace(/^https?:\/\//, 'ws://'),
+    uri: WS_URL,
     options: {
-      reconnect: true,
       lazy: true,
-      connectionParams() {
-        return { token: null };
+      reconnect: true,
+      connectionParams: async () => {
+        const token = await getToken();
+        return { token };
       },
     },
   });
@@ -75,7 +78,7 @@ export const createClient = (API_URL) => {
   });
 
   const errorLink = onError((errors) => {
-    console.log(errors);
+    console.error(errors);
   });
 
   const networkLink = split(
