@@ -37,11 +37,11 @@ const cacheEnhancer = (cache) => {
   return cache;
 };
 
-export const createClient = ({ API_URL, WS_URL }) => {
+export const createClient = (API_URL) => {
   const httpLink = new HttpLink({ uri: API_URL });
 
   const wsLink = new WebSocketLink({
-    uri: WS_URL,
+    uri: API_URL.replace(/^https?:\/\//, 'ws://'),
     options: {
       reconnect: true,
       lazy: true,
@@ -92,7 +92,4 @@ export const createClient = ({ API_URL, WS_URL }) => {
   return new ApolloClient({ link, cache });
 };
 
-export default createClient({
-  API_URL: env.API_URL,
-  WS_URL: env.WS_URL,
-});
+export default createClient(env.GRAPHQL_URL);

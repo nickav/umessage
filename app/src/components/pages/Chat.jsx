@@ -14,7 +14,7 @@ import styles from './Chat.scss';
 import Header from '@/components/common/Header';
 import TextInput from '@/components/common/TextInput';
 import { CHAT_MESSAGES, SEND_MESSSAGE } from '@/store/chat';
-import { BASE_URL } from '@/helpers/env';
+import { API_URL } from '@/helpers/env';
 import { prettyTimeShort, prettyTime, getFakeId } from '@/helpers/functions';
 
 export default class Chat extends React.Component {
@@ -57,7 +57,7 @@ export default class Chat extends React.Component {
           <Image
             style={{ width: 64, height: 64 }}
             source={{
-              uri: `http://${BASE_URL}/attachments/${attachments[0].id}`,
+              uri: `http://${API_URL}/attachments/${attachments[0].id}`,
             }}
           />
         )}

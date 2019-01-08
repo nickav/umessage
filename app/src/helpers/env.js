@@ -1,15 +1,11 @@
-const ip = '192.168.1.180';
-
 const Env = {
   dev: {
-    BASE_URL: 'http://localhost:3001'.replace('localhost', ip),
-    API_URL: 'http://localhost:3001/graphql'.replace('localhost', ip),
-    WS_URL: 'ws://localhost:3001/graphql'.replace('localhost', ip),
+    API_URL: 'http://192.168.1.180:3001',
+    GRAPHQL_URL: 'http://192.168.1.180:3001/graphql',
   },
   prod: {
-    BASE_URL: '',
-    API_URL: '',
-    WS_URL: '',
+    API_URL: 'http://68.195.141.219:22222',
+    GRAPHQL_URL: 'http://68.195.141.219:22222/graphql',
   },
 };
 
