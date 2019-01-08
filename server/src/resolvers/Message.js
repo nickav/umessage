@@ -8,4 +8,8 @@ export default {
       return ctx.loaders.attachments.load(message.id);
     }
   },
+
+  chat(message, args, ctx) {
+    return ctx.loaders.messageChats.load(message.id);
+  },
 };

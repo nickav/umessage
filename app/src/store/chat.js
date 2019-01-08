@@ -90,7 +90,7 @@ export const handleNewMessage = (cache, message, chatId) => {
     query: CHAT_MESSAGES,
     variables: {
       id: chatId,
-      page: { size: MESSAGES_PER_PAGE },
+      page: { size: 30 },
     },
     data: (data) => {
       data.chat.messagePage.items = data.chat.messagePage.items.filter(

@@ -84,5 +84,17 @@ export default function createLoaders(ctx) {
           return messageIds.map((id) => groups[id]);
         });
     }),
+
+    messageChats: new DataLoader((messageIds) => {
+      return db
+        .all(
+          `
+        SELECT ${db.getChatProps()}, message_id FROM chat
+        JOIN chat_message_join ON chat.ROWID = chat_message_join.chat_id
+        WHERE chat_message_join.message_id IN (${messageIds.join(', ')})
+        `
+        )
+        .then((chats) => orderArrayByIds(chats, messageIds, 'message_id'));
+    }),
   };
 }

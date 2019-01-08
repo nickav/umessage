@@ -38,6 +38,7 @@ export default gql`
 
     associated_message_guid: String
 
+    chat: Chat
     handle: Handle
     attachments: [Attachment]
   }
