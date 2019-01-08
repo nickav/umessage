@@ -1,20 +1,13 @@
-import store from '@/store/local';
+import { AsyncStorage } from 'react-native';
 
 export const setAuth = (id, token) => {
-  store.setItem('id', id);
-  store.setItem('token', token);
+  return AsyncStorage.multiSet([['id', id], ['token', token]]);
 };
 
-export const getUserId = () => store.getItem('id');
+export const getUserId = async () => AsyncStorage.getItem('id');
 
-export const getToken = () => store.getItem('token');
-
-export const getUser = () => {
-  const id = getUserId();
-  return id ? { id } : null;
-};
+export const getToken = async () => AsyncStorage.getItem('token');
 
 export const invalidateAuth = () => {
-  store.removeItem('token');
-  store.removeItem('id');
+  return AsyncStorage.multiRemove(['id', 'token']);
 };

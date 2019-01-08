@@ -8,6 +8,7 @@ import { onError } from 'apollo-link-error';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { persistCache } from 'apollo-cache-persist';
 import { getMainDefinition } from 'apollo-utilities';
+import { setContext } from 'apollo-link-context';
 
 import env from '@/helpers/env';
 import { getToken } from './auth';
@@ -21,7 +22,7 @@ export const createClient = ({ API_URL, WS_URL }) => {
       reconnect: true,
       lazy: true,
       connectionParams() {
-        return { jwt: getToken() };
+        return { token: null };
       },
     },
   });
@@ -39,19 +40,16 @@ export const createClient = ({ API_URL, WS_URL }) => {
     cache,
   });
 
-  const authLink = (op, next) => {
-    const token = getToken();
+  const authLink = setContext(async (req, { headers }) => {
+    const token = await getToken();
 
-    if (token) {
-      op.setContext({
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-    }
-
-    return next(op);
-  };
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : null,
+      },
+    };
+  });
 
   const errorLink = onError((errors) => {
     console.log(errors);
