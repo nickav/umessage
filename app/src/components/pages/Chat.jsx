@@ -14,6 +14,7 @@ import styles from './Chat.scss';
 import Header from '@/components/common/Header';
 import TextInput from '@/components/common/TextInput';
 import { CHAT_MESSAGES, SEND_MESSSAGE } from '@/store/chat';
+import { BASE_URL } from '@/helpers/env';
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -40,7 +41,7 @@ export default class Chat extends React.Component {
         <Image
           style={{ width: 64, height: 64 }}
           source={{
-            uri: `http://10.0.0.2:3001/attachments/${attachments[0].id}`,
+            uri: `http://${BASE_URL}/attachments/${attachments[0].id}`,
           }}
         />
       )}

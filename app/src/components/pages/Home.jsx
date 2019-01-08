@@ -47,24 +47,34 @@ export default class Home extends React.Component {
         <Header />
 
         <Query query={CHAT_FEED}>
-          {({ loading, error, data, refetch }) => (
-            <FlatList
-              data={data.chats}
-              refreshing={data.networkStatus === 4}
-              onRefresh={() => refetch()}
-              renderItem={({ item }) => (
-                <Home.Chat
-                  {...item}
-                  display_name={
-                    item.display_name ||
-                    item.handles.map((e) => e.guid).join(', ')
-                  }
-                  onPress={() => navigate('Chat', { item })}
-                />
-              )}
-              keyExtractor={(item, i) => item.guid}
-            />
-          )}
+          {({ loading, error, data, refetch }) => {
+            if (loading) {
+              return <Text style={styles.text}>Loading...</Text>;
+            }
+
+            if (error) {
+              return <Text style={styles.text}>Something went wrong.</Text>;
+            }
+
+            return (
+              <FlatList
+                data={data.chats}
+                refreshing={data.networkStatus === 4}
+                onRefresh={() => refetch()}
+                renderItem={({ item }) => (
+                  <Home.Chat
+                    {...item}
+                    display_name={
+                      item.display_name ||
+                      item.handles.map((e) => e.guid).join(', ')
+                    }
+                    onPress={() => navigate('Chat', { item })}
+                  />
+                )}
+                keyExtractor={(item, i) => item.guid}
+              />
+            );
+          }}
         </Query>
       </View>
     );
