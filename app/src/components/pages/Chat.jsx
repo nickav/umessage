@@ -80,26 +80,16 @@ export default class Chat extends React.Component {
     });
   };
 
-  handleScroll = (fetchMore, variables) => (event) => {
+  onScrollThreshold = (threshold) => (fn) => (event) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
 
     const percent =
       Math.abs(
         contentOffset.y + layoutMeasurement.height - contentSize.height
       ) / layoutMeasurement.height;
-    const threshold = 0.5;
 
     if (percent <= threshold) {
-      fetchMore({
-        variables,
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prev;
-          fetchMoreResult.chat.messagePage.items.unshift(
-            ...prev.chat.messagePage.items
-          );
-          return fetchMoreResult;
-        },
-      });
+      fn();
     }
   };
 
@@ -130,12 +120,24 @@ export default class Chat extends React.Component {
                   onScroll={
                     loading
                       ? undefined
-                      : this.handleScroll(fetchMore, {
-                          id,
-                          page: {
-                            size: 30,
-                            cursor: data.chat.messagePage.cursor,
-                          },
+                      : this.onScrollThreshold(0.8)(() => {
+                          const { cursor } = data.chat.messagePage;
+
+                          if (!cursor) {
+                            console.log('End reached.');
+                            return;
+                          }
+
+                          fetchMore({
+                            variables: { id, page: { size: 30, cursor } },
+                            updateQuery: (prev, { fetchMoreResult }) => {
+                              if (!fetchMoreResult) return prev;
+                              fetchMoreResult.chat.messagePage.items.unshift(
+                                ...prev.chat.messagePage.items
+                              );
+                              return fetchMoreResult;
+                            },
+                          });
                         })
                   }
                   data={data.chat.messagePage.items}

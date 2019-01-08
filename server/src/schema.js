@@ -16,7 +16,7 @@ export default gql`
 
   # Page fetch results
   type PageResult {
-    cursor: String!
+    cursor: String
     items: [Pageable]!
   }
 

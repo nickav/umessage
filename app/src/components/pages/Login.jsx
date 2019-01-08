@@ -18,14 +18,6 @@ export default class Login extends React.Component {
     password: '',
   };
 
-  componentDidMount() {
-    const { navigation } = this.props;
-
-    getToken().then((token) => {
-      if (token) navigation.replace('Home');
-    });
-  }
-
   render() {
     const { navigation } = this.props;
     const { email, password } = this.state;

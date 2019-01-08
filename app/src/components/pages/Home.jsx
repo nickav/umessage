@@ -10,6 +10,7 @@ import { Query } from 'react-apollo';
 
 import Header from '@/components/common/Header';
 import { CHAT_FEED } from '@/store/chat';
+import { getToken } from '@/store/auth';
 
 import styles from './Home.scss';
 
@@ -38,6 +39,16 @@ export default class Home extends React.Component {
       </TouchableNativeFeedback>
     </View>
   );
+
+  componentWillMount() {
+    const { navigation } = this.props;
+
+    getToken().then((token) => {
+      if (!token) {
+        navigation.replace('Login');
+      }
+    });
+  }
 
   render() {
     const { navigate } = this.props.navigation;

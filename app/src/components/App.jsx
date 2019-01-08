@@ -12,9 +12,9 @@ import * as pages from '@/components/pages';
 import styles from './App.scss';
 
 const routes = {
-  Login: { screen: pages.Login },
   Home: { screen: pages.Home },
   Chat: { screen: pages.Chat },
+  Login: { screen: pages.Login },
 };
 
 const Navigator = createStackNavigator(routes, {
