@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 
 const formatCalendarDate = (date, fn, referenceTime = null) => {
-  const now = dayjs(referenceTime || Date.now());
   const then = dayjs(date);
+  const now = dayjs(referenceTime || Date.now());
   const days = now.diff(then, 'days', true);
-  return now.format(fn(days));
+  return then.format(fn(days));
 };
 
 const newestLastSort = (a, b) =>

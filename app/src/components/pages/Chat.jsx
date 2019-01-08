@@ -5,7 +5,7 @@ import {
   Button,
   FlatList,
   Image,
-  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { Query, Mutation } from 'react-apollo';
 import { Linking, TouchableHighlight } from 'react-native';
@@ -35,29 +35,50 @@ export default class Chat extends React.Component {
     };
   };
 
-  static Message = ({ id, text, date, is_from_me, attachments }) => (
-    <View style={[styles.Message]}>
-      <Text style={[styles.text, is_from_me && styles.me]}>{text}</Text>
-      <Text style={styles.text}>{prettyTime(date)}</Text>
-      {attachments && (
-        <Image
-          style={{ width: 64, height: 64 }}
-          source={{
-            uri: `http://${BASE_URL}/attachments/${attachments[0].id}`,
-          }}
-        />
-      )}
-    </View>
+  static Message = ({
+    id,
+    text,
+    date,
+    is_from_me,
+    attachments,
+    onPress,
+    isExpanded,
+  }) => (
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={[styles.Message]}>
+        <Text style={[styles.text, is_from_me && styles.me]}>{text}</Text>
+        {isExpanded && <Text style={styles.text}>{prettyTimeShort(date)}</Text>}
+        {attachments && (
+          <Image
+            style={{ width: 64, height: 64 }}
+            source={{
+              uri: `http://${BASE_URL}/attachments/${attachments[0].id}`,
+            }}
+          />
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 
   state = {
     text: '',
+    expanded: {},
+  };
+
+  toggleExpanded = (id) => () => {
+    const { expanded } = this.state;
+    this.setState({
+      expanded: {
+        ...expanded,
+        [id]: !expanded[id],
+      },
+    });
   };
 
   render() {
     const { state } = this.props.navigation;
 
-    const { text } = this.state;
+    const { text, expanded } = this.state;
 
     const { id, handles } = state.params.item;
 
@@ -75,7 +96,13 @@ export default class Chat extends React.Component {
                   onRefresh={() => refetch()}
                   onViewableItemsChanged={console.log}
                   data={data.chat.messagePage.items}
-                  renderItem={({ item }) => <Chat.Message {...item} />}
+                  renderItem={({ item }) => (
+                    <Chat.Message
+                      {...item}
+                      isExpanded={!!expanded[item.id]}
+                      onPress={this.toggleExpanded(item.id)}
+                    />
+                  )}
                   keyExtractor={(item, i) => item.id.toString()}
                 />
               ) : (
