@@ -80,6 +80,29 @@ export default class Chat extends React.Component {
     });
   };
 
+  handleScroll = (fetchMore, variables) => (event) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+
+    const percent =
+      Math.abs(
+        contentOffset.y + layoutMeasurement.height - contentSize.height
+      ) / layoutMeasurement.height;
+    const threshold = 0.5;
+
+    if (percent <= threshold) {
+      fetchMore({
+        variables,
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev;
+          fetchMoreResult.chat.messagePage.items.unshift(
+            ...prev.chat.messagePage.items
+          );
+          return fetchMoreResult;
+        },
+      });
+    }
+  };
+
   render() {
     const { state } = this.props.navigation;
 
@@ -92,15 +115,30 @@ export default class Chat extends React.Component {
         <Header />
 
         <View style={styles.Messages}>
-          <Query query={CHAT_MESSAGES} variables={{ id, page: { size: 30 } }}>
-            {({ loading, error, data, refetch }) =>
+          <Query
+            query={CHAT_MESSAGES}
+            skip={!id}
+            variables={{ id, page: { size: 30 } }}
+            notifyOnNetworkStatusChange
+          >
+            {({ loading, error, data, refetch, fetchMore }) =>
               data.chat ? (
                 <FlatList
                   inverted
                   refreshing={data.networkStatus === 4}
                   onRefresh={() => refetch()}
-                  onViewableItemsChanged={undefined}
-                  data={data.chat.messagePage.items.sort((a, b) => b.id - a.id)}
+                  onScroll={
+                    loading
+                      ? undefined
+                      : this.handleScroll(fetchMore, {
+                          id,
+                          page: {
+                            size: 30,
+                            cursor: data.chat.messagePage.cursor,
+                          },
+                        })
+                  }
+                  data={data.chat.messagePage.items}
                   renderItem={({ item }) => (
                     <Chat.Message
                       {...item}

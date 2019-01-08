@@ -25,10 +25,12 @@ export default {
       )
       .then((messages) => ({
         cursor: toSortCursor(messages[messages.length - 1]),
-        items: messages.map((message) => ({
-          ...message,
-          date: fromAppleTime(message.date),
-        })),
+        items: messages
+          .map((message) => ({
+            ...message,
+            date: fromAppleTime(message.date),
+          }))
+          .sort((a, b) => b.id - a.id),
       }));
   },
 
