@@ -71,7 +71,7 @@ async function init() {
   server.installSubscriptionHandlers(httpServer);
 
   // Start background polling:
-  poll(app.context, { interval: 2000 });
+  poll(app.context, { interval: 400 });
 }
 
 export default init;

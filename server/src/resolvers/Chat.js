@@ -1,3 +1,4 @@
+import _ from 'hibar';
 import { toSortCursor, fromSortCursor, fromAppleTime } from './helpers';
 
 export default {
@@ -12,6 +13,8 @@ export default {
       }));
     }
 
+    const limit = _.clamp(page.size || 20, 0, 100);
+
     return db
       .all(
         `
@@ -20,7 +23,7 @@ export default {
         WHERE chat_message_join.chat_id = ${chat.id}
         ${page.cursor ? 'AND ROWID < ' + fromSortCursor(page.cursor) : ''}
         ORDER BY date DESC
-        LIMIT ${page.size || 20};
+        LIMIT ${limit};
         `
       )
       .then((messages) => ({

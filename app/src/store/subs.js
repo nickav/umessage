@@ -1,5 +1,7 @@
 import gql from 'graphql-tag';
 
+import { handleNewMessage } from '@/store/chat';
+
 export const MESSAGE_ADDED = gql`
   subscription {
     messageAdded {
@@ -7,6 +9,10 @@ export const MESSAGE_ADDED = gql`
       text
       date
       is_from_me
+
+      chat {
+        id
+      }
 
       attachments {
         id
@@ -24,7 +30,12 @@ export const subscribe = (client) => [
     })
     .subscribe({
       next({ data }) {
+        const {
+          messageAdded: { chat, ...message },
+        } = data;
+
         console.log('MESSAGE_ADDED', data);
+        handleNewMessage(client.cache, message, chat.id);
       },
     }),
 ];
