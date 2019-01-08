@@ -1,7 +1,7 @@
 const Env = {
   dev: {
-    API_URL: 'http://192.168.0.164:3001/graphql',
-    WS_URL: 'ws://192.168.0.164:3001/graphql',
+    API_URL: 'http://localhost:3001/graphql',
+    WS_URL: 'ws://localhost:3001/graphql',
   },
   prod: {
     API_URL: '',

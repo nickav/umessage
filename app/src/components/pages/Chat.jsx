@@ -40,7 +40,7 @@ export default class Chat extends React.Component {
         <Image
           style={{ width: 64, height: 64 }}
           source={{
-            uri: `http://192.168.0.164:3001/attachments/${attachments[0].id}`,
+            uri: `http://10.0.0.2:3001/attachments/${attachments[0].id}`,
           }}
         />
       )}
