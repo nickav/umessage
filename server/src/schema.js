@@ -37,7 +37,6 @@ export default gql`
     is_from_me: Boolean!
 
     associated_message_guid: String
-    payload_data: String
 
     handle: Handle
     attachments: [Attachment]
@@ -90,7 +89,7 @@ export default gql`
     auth(email: String!, password: String!): String
 
     # create a new message
-    sendMessage(handleGuids: [String]!, text: String!): Boolean! @auth
+    sendMessage(handleGuids: [String]!, text: String!): Message @auth
   }
 
   type Subscription {

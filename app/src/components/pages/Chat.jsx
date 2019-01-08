@@ -47,7 +47,11 @@ export default class Chat extends React.Component {
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={[styles.Message]}>
         <Text style={[styles.text, is_from_me && styles.me]}>{text}</Text>
-        {isExpanded && <Text style={styles.text}>{prettyTimeShort(date)}</Text>}
+        {isExpanded && (
+          <Text style={[styles.text, is_from_me && styles.me]}>
+            {prettyTimeShort(date)}
+          </Text>
+        )}
         {attachments && (
           <Image
             style={{ width: 64, height: 64 }}
