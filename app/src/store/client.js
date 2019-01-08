@@ -13,6 +13,30 @@ import { setContext } from 'apollo-link-context';
 import env from '@/helpers/env';
 import { getToken } from './auth';
 
+const cacheEnhancer = (cache) => {
+  cache.readWriteQuery = (query) => {
+    let data = null;
+
+    try {
+      data = cache.readQuery(query);
+    } catch (err) {
+      console.log('readWriteQuery', err);
+    }
+
+    if (data) {
+      if (typeof query.data == 'function') {
+        query.data(data);
+      }
+
+      cache.writeQuery({ ...query, data });
+    }
+
+    return data;
+  };
+
+  return cache;
+};
+
 export const createClient = ({ API_URL, WS_URL }) => {
   const httpLink = new HttpLink({ uri: API_URL });
 
@@ -27,7 +51,7 @@ export const createClient = ({ API_URL, WS_URL }) => {
     },
   });
 
-  const cache = new InMemoryCache();
+  const cache = cacheEnhancer(new InMemoryCache());
 
   persistCache({
     cache,
@@ -64,27 +88,6 @@ export const createClient = ({ API_URL, WS_URL }) => {
   );
 
   const link = ApolloLink.from([errorLink, stateLink, authLink, networkLink]);
-
-  cache.readWriteQuery = (query) => {
-    let data = null;
-
-    try {
-      data = cache.readQuery(query);
-    } catch (err) {
-      // NO-OP
-      log(err);
-    }
-
-    if (data) {
-      if (typeof query.data == 'function') {
-        query.data(data);
-      }
-
-      cache.writeQuery({ ...query, data });
-    }
-
-    return data;
-  };
 
   return new ApolloClient({ link, cache });
 };
