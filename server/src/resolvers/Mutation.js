@@ -1,7 +1,10 @@
 import { sendMessage } from '../imessage';
+import { auth } from '../auth';
 
 export default {
-  sendMessage(_, { handleGuids, text }, ctx) {
+  auth: (_, args, ctx) => auth(ctx, args),
+
+  sendMessage: (_, { handleGuids, text }, ctx) => {
     const sanitizedText = text.trim();
 
     return sendMessage(handleGuids, sanitizedText)

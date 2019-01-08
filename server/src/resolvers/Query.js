@@ -2,7 +2,6 @@ import metascraper from 'metascraper';
 import got from 'got';
 
 import { transformMessage } from './helpers';
-import { auth } from '../auth';
 
 export default {
   handles: (_, args, { db }) =>
@@ -25,6 +24,4 @@ export default {
 
   metatags: (_, args, ctx) =>
     got(args.url).then(({ body: html, url }) => metascraper({ html, url })),
-
-  auth: (_, args, ctx) => auth(ctx, args),
 };

@@ -72,9 +72,6 @@ export default gql`
   }
 
   type Query {
-    # sign in user
-    auth(email: String!, password: String!): String
-
     # get all chats
     chats: [Chat] @auth
 
@@ -89,6 +86,9 @@ export default gql`
   }
 
   type Mutation {
+    # sign in user
+    auth(email: String!, password: String!): String
+
     # create a new message
     sendMessage(handleGuids: [String]!, text: String!): Boolean! @auth
   }
