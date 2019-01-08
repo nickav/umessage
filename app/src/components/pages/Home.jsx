@@ -47,9 +47,11 @@ export default class Home extends React.Component {
         <Header />
 
         <Query query={CHAT_FEED}>
-          {({ loading, error, data }) => (
+          {({ loading, error, data, refetch }) => (
             <FlatList
               data={data.chats}
+              refreshing={data.networkStatus === 4}
+              onRefresh={() => refetch()}
               renderItem={({ item }) => (
                 <Home.Chat
                   {...item}

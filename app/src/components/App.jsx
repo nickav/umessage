@@ -22,7 +22,6 @@ const Navigator = createStackNavigator(routes, {
     headerTitleStyle: styles.Title,
     headerTintColor: '#fff',
   },
-  //headerMode: 'none',
 });
 
 const AppContainer = createAppContainer(Navigator);

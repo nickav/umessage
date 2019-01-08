@@ -1,8 +1,7 @@
 import { PermissionsAndroid } from 'react-native';
 import Contacts from 'react-native-contacts';
-import _ from 'hibar';
-
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import _ from 'hibar';
 
 export const normalizePhone = (phone) =>
   parsePhoneNumberFromString(phone).number;
@@ -14,7 +13,7 @@ const contactFullName = (contact) =>
 
 const getAllContacts = _.promisify(Contacts.getAll);
 
-export const getAll = () =>
+export const getContacts = () =>
   PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS).then(
     (enabled) => {
       if (!enabled) {
