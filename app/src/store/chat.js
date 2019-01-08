@@ -18,13 +18,12 @@ export const CHAT_FEED = gql`
             id
             text
             date
+            is_from_me
 
             attachments {
               id
-              guid
               mime_type
               total_bytes
-              filename
             }
           }
         }
@@ -68,6 +67,17 @@ export const CHAT_MESSAGES = gql`
 
 export const SEND_MESSSAGE = gql`
   mutation($handleGuids: [String]!, $text: String!) {
-    sendMessage(handleGuids: $handleGuids, text: $text)
+    sendMessage(handleGuids: $handleGuids, text: $text) {
+      id
+      text
+      date
+      is_from_me
+
+      attachments {
+        id
+        mime_type
+        total_bytes
+      }
+    }
   }
 `;

@@ -66,6 +66,27 @@ export const createClient = ({ API_URL, WS_URL }) => {
 
   const link = ApolloLink.from([errorLink, stateLink, authLink, networkLink]);
 
+  cache.readWriteQuery = (query) => {
+    let data = null;
+
+    try {
+      data = cache.readQuery(query);
+    } catch (err) {
+      // NO-OP
+      log(err);
+    }
+
+    if (data) {
+      if (typeof query.data == 'function') {
+        query.data(data);
+      }
+
+      cache.writeQuery({ ...query, data });
+    }
+
+    return data;
+  };
+
   return new ApolloClient({ link, cache });
 };
 

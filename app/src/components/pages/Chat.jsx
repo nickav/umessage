@@ -15,7 +15,7 @@ import Header from '@/components/common/Header';
 import TextInput from '@/components/common/TextInput';
 import { CHAT_MESSAGES, SEND_MESSSAGE } from '@/store/chat';
 import { BASE_URL } from '@/helpers/env';
-import { prettyTimeShort, prettyTime } from '@/helpers/functions';
+import { prettyTimeShort, prettyTime, getFakeId } from '@/helpers/functions';
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -25,6 +25,7 @@ export default class Chat extends React.Component {
       headerRight: (
         <TouchableHighlight
           onPress={() => Linking.openURL(`tel:${handles[0].guid}`)}
+          style={styles.Icon}
         >
           <Image
             source={require('./call.png')}
@@ -98,8 +99,8 @@ export default class Chat extends React.Component {
                   inverted
                   refreshing={data.networkStatus === 4}
                   onRefresh={() => refetch()}
-                  onViewableItemsChanged={console.log}
-                  data={data.chat.messagePage.items}
+                  onViewableItemsChanged={undefined}
+                  data={data.chat.messagePage.items.sort((a, b) => b.id - a.id)}
                   renderItem={({ item }) => (
                     <Chat.Message
                       {...item}
@@ -115,7 +116,31 @@ export default class Chat extends React.Component {
             }
           </Query>
 
-          <Mutation mutation={SEND_MESSSAGE}>
+          <Mutation
+            mutation={SEND_MESSSAGE}
+            optimisticResponse={{
+              sendMessage: {
+                __typename: 'Message',
+                id: getFakeId(),
+                text,
+                date: new Date().toISOString(),
+                is_from_me: true,
+                attachments: null,
+              },
+            }}
+            update={(cache, { data: { sendMessage } }) => {
+              cache.readWriteQuery({
+                query: CHAT_MESSAGES,
+                variables: { id, page: { size: 30 } },
+                data: (data) => {
+                  data.chat.messagePage.items = data.chat.messagePage.items.filter(
+                    (e) => e.id > 0
+                  );
+                  data.chat.messagePage.items.unshift(sendMessage);
+                },
+              });
+            }}
+          >
             {(sendMessage) => (
               <View style={styles.Composer}>
                 <TextInput
