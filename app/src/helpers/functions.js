@@ -1,27 +1,26 @@
 import dayjs from 'dayjs';
 
+const formatCalendarDate = (date, fn, referenceTime = null) => {
+  const now = dayjs(referenceTime || Date.now());
+  const then = dayjs(date);
+  const days = now.diff(then, 'days', true);
+  return now.format(fn(days));
+};
+
 const newestLastSort = (a, b) =>
   new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
 
-export const prettyTime = (ms) =>
-  dayjs(ms).calendar(null, {
-    sameDay: 'LT',
-    lastDay: 'ddd',
-    lastWeek: 'MMM D',
-    sameElse: function(now) {
-      return 'DD/MM/YYYY';
-    },
-  });
+export const prettyTimeShort = (ms) =>
+  formatCalendarDate(
+    ms,
+    (diff) => (diff < 7 ? 'ddd, h:mm a' : 'MMM D, h:mm a')
+  );
 
-export const prettyDatetime = (ms) =>
-  dayjs(ms).calendar(null, {
-    sameDay: 'LT',
-    lastDay: 'ddd LT',
-    lastWeek: 'ddd LT',
-    sameElse: function(now) {
-      return 'MMM Do, LT';
-    },
-  });
+export const prettyTime = (ms) =>
+  formatCalendarDate(
+    ms,
+    (diff) => (diff < 7 ? 'dddd • h:mm a' : 'dddd, MMM D • h:mm a')
+  );
 
 export const arrayCollect = (array, equals = (a, b) => false) => {
   if (!array.length) return [];
@@ -42,9 +41,12 @@ export const arrayCollect = (array, equals = (a, b) => false) => {
   }
 
   return result;
-}
+};
 
-export const convertToMessageGroups = (messages, insertTimesAfter = 3600000) => {
+export const convertToMessageGroups = (
+  messages,
+  insertTimesAfter = 3600000
+) => {
   const groups = arrayCollect(
     messages.map((m) => ({
       ...m,
@@ -87,4 +89,4 @@ export const convertToMessageGroups = (messages, insertTimesAfter = 3600000) => 
   }
 
   return result;
-}
+};

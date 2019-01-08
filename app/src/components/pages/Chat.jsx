@@ -15,6 +15,7 @@ import Header from '@/components/common/Header';
 import TextInput from '@/components/common/TextInput';
 import { CHAT_MESSAGES, SEND_MESSSAGE } from '@/store/chat';
 import { BASE_URL } from '@/helpers/env';
+import { prettyTimeShort, prettyTime } from '@/helpers/functions';
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -37,6 +38,7 @@ export default class Chat extends React.Component {
   static Message = ({ id, text, date, is_from_me, attachments }) => (
     <View style={[styles.Message]}>
       <Text style={[styles.text, is_from_me && styles.me]}>{text}</Text>
+      <Text style={styles.text}>{prettyTime(date)}</Text>
       {attachments && (
         <Image
           style={{ width: 64, height: 64 }}
@@ -63,11 +65,7 @@ export default class Chat extends React.Component {
       <View style={styles.Chat}>
         <Header />
 
-        <KeyboardAvoidingView
-          style={styles.Messages}
-          behavior="padding"
-          enabled
-        >
+        <View style={styles.Messages}>
           <Query query={CHAT_MESSAGES} variables={{ id, page: { size: 30 } }}>
             {({ loading, error, data, refetch }) =>
               data.chat ? (
@@ -115,7 +113,7 @@ export default class Chat extends React.Component {
               </View>
             )}
           </Mutation>
-        </KeyboardAvoidingView>
+        </View>
       </View>
     );
   }
