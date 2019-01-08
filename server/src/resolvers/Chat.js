@@ -5,7 +5,7 @@ export default {
     const { db } = ctx;
     const { page } = args;
 
-    if (page.count === 1 && !page.cursor) {
+    if (page.size === 1 && !page.cursor) {
       return ctx.loaders.lastMessage.load(chat.id).then((message) => ({
         cursor: toSortCursor(message),
         items: [message].filter((e) => e),
@@ -20,7 +20,7 @@ export default {
         WHERE chat_message_join.chat_id = ${chat.id}
         ${page.cursor ? 'AND ROWID < ' + fromSortCursor(page.cursor) : ''}
         ORDER BY date DESC
-        LIMIT ${page.count || 20};
+        LIMIT ${page.size || 20};
         `
       )
       .then((messages) => ({

@@ -12,7 +12,7 @@ export const CHAT_FEED = gql`
         guid
       }
 
-      messagePage(page: { count: 1 }) {
+      messagePage(page: { size: 1 }) {
         items {
           ... on Message {
             id

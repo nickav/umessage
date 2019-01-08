@@ -68,13 +68,14 @@ export default class Chat extends React.Component {
           behavior="padding"
           enabled
         >
-          <Query query={CHAT_MESSAGES} variables={{ id }}>
+          <Query query={CHAT_MESSAGES} variables={{ id, page: { size: 30 } }}>
             {({ loading, error, data, refetch }) =>
               data.chat ? (
                 <FlatList
                   inverted
                   refreshing={data.networkStatus === 4}
                   onRefresh={() => refetch()}
+                  onViewableItemsChanged={console.log}
                   data={data.chat.messagePage.items}
                   renderItem={({ item }) => <Chat.Message {...item} />}
                   keyExtractor={(item, i) => item.id.toString()}

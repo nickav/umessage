@@ -10,7 +10,7 @@ export default gql`
 
   # input for cursor connections
   input PageInput {
-    count: Int
+    size: Int
     cursor: String
   }
 
