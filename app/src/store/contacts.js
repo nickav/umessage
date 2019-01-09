@@ -6,6 +6,11 @@ import _ from 'hibar';
 export const normalizePhone = (phone) =>
   (parsePhoneNumberFromString(phone, 'US') || {}).number || phone;
 
+export const prettyPhone = (phone) => {
+  const phoneNumber = parsePhoneNumberFromString(phone);
+  return phoneNumber ? phoneNumber.formatNational() : phone;
+};
+
 const contactFullName = (contact) =>
   [contact.givenName, contact.middleName, contact.familyName]
     .filter((e) => e)
@@ -51,6 +56,6 @@ export const getDisplayName = (chat, contactsByPhone = {}) =>
         ? phones.length > 1
           ? contact.givenName
           : contactFullName(contact)
-        : phone;
+        : prettyPhone(phone);
     })
     .join(', ');
