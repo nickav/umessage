@@ -12,6 +12,7 @@ export default {
       SELECT ${db.getChatProps()} FROM message
       JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
       JOIN chat ON chat_message_join.chat_id = chat.ROWID
+      WHERE chat.is_archived = 0
       GROUP BY chat_id
       ORDER BY date DESC;
     `),

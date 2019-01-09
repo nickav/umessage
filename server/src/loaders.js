@@ -18,7 +18,7 @@ export default function createLoaders(ctx) {
           `
           SELECT ${db.getHandleProps()} FROM handle
           WHERE ROWID in (${ids.join(', ')});
-        `
+          `
         )
         .then((handles) => orderArrayByIds(handles, ids))
     ),
@@ -31,7 +31,7 @@ export default function createLoaders(ctx) {
            FROM handle
            JOIN chat_handle_join ON chat_handle_join.handle_id = handle.ROWID
            WHERE chat_id IN (${chatIds.join(', ')});
-        `
+          `
         )
         .then((handles) => {
           const groups = _.groupBy(handles, (handle) => handle.chat_id);
@@ -65,10 +65,10 @@ export default function createLoaders(ctx) {
       return db
         .all(
           `
-        SELECT ${db.getAttachmentProps()}, message_id FROM attachment
-        JOIN message_attachment_join ON attachment.ROWID = message_attachment_join.attachment_id
-        WHERE message_id IN (${messageIds.join(', ')});
-        `
+          SELECT ${db.getAttachmentProps()}, message_id FROM attachment
+          JOIN message_attachment_join ON attachment.ROWID = message_attachment_join.attachment_id
+          WHERE message_id IN (${messageIds.join(', ')});
+          `
         )
         .then((attachments) =>
           attachments.map((attachment) => ({
@@ -89,10 +89,10 @@ export default function createLoaders(ctx) {
       return db
         .all(
           `
-        SELECT ${db.getChatProps()}, message_id FROM chat
-        JOIN chat_message_join ON chat.ROWID = chat_message_join.chat_id
-        WHERE chat_message_join.message_id IN (${messageIds.join(', ')})
-        `
+          SELECT ${db.getChatProps()}, message_id FROM chat
+          JOIN chat_message_join ON chat.ROWID = chat_message_join.chat_id
+          WHERE chat_message_join.message_id IN (${messageIds.join(', ')})
+          `
         )
         .then((chats) => orderArrayByIds(chats, messageIds, 'message_id'));
     }),
