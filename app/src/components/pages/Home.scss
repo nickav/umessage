@@ -8,6 +8,25 @@
 .Chat {
   display: flex;
   background: #000;
+  flex: 1;
+  width: 100%;
+}
+
+.inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 32px;
+}
+
+.left {
+  display: flex;
+  flex: 1;
+}
+
+.right {
+  margin-left: auto;
+  padding-left: 16px;
 }
 
 .title {
@@ -16,9 +35,4 @@
 
 .text {
   color: #888;
-}
-
-.inner {
-  display: flex;
-  padding: 12px 32px;
 }

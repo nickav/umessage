@@ -7,12 +7,32 @@ const timeFormat = is24Hour ? 'HH:mm' : 'h:mm a';
 const formatCalendarDate = (date, fn, referenceTime = null) => {
   const then = dayjs(date);
   const now = dayjs(referenceTime || Date.now());
-  const days = now.diff(then, 'days', true);
-  return then.format(fn(days));
+  const absoluteDays = now.diff(then, 'days', true);
+  const relativeDays = now.diff(then.startOf('day'), 'days', true);
+  return then.format(fn(relativeDays, absoluteDays));
 };
 
-const newestLastSort = (a, b) =>
-  new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+const minutesAgo = (days) => ~~(days * (24 * 60));
+const hoursAgo = (days) => ~~(days * 24);
+
+const timeFromNow = days => {
+  const mins = ~~(days * 24 * 60);
+  const hours = ~~(days * 24);
+
+  if (mins < 1) {
+    return '[Now]';
+  }
+
+  if (mins < 60) {
+    return `[${mins} min]`;
+  }
+
+  if (hours < 24) {
+    return `[${hours} hr]`
+  }
+
+  return timeFormat;
+}
 
 export const prettyTimeShort = (ms) =>
   formatCalendarDate(
@@ -20,10 +40,25 @@ export const prettyTimeShort = (ms) =>
     (diff) => (diff < 7 ? `ddd, ${timeFormat}` : `MMM D, ${timeFormat}`)
   );
 
+export const prettyTimeTiny = (ms) =>
+  formatCalendarDate(ms, (diff, days) => {
+    if (diff < 1) {
+      const mins = minutesAgo(days);
+
+      return mins < 1
+        ? '[Now]'
+        : mins < 60
+          ? `[${mins} min]`
+          : timeFormat;
+    }
+    return diff < 7 ? `ddd` : `MMM D`;
+  });
+
 export const prettyTime = (ms) =>
   formatCalendarDate(
     ms,
-    (diff) => (diff < 7 ? `dddd • ${timeFormat}` : `dddd, MMM D • ${timeFormat}`)
+    (diff) =>
+      diff < 7 ? `dddd • ${timeFormat}` : `dddd, MMM D • ${timeFormat}`
   );
 
 export const getFakeId = (() => {
