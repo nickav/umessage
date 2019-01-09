@@ -51,6 +51,7 @@ export const prettyTimeTiny = (ms) =>
           ? `[${mins} min]`
           : timeFormat;
     }
+
     return diff < 7 ? `ddd` : `MMM D`;
   });
 
@@ -65,3 +66,11 @@ export const getFakeId = (() => {
   let id = 0;
   return () => --id;
 })();
+
+const transformChatSections2 = (messages, insertTimesAfter = 3600000) => {
+  return messages.reduce((sections, message) => {
+    const section = sections[sections.length - 1];
+
+    return sections;
+  }, []);
+}

@@ -19,6 +19,7 @@ export const CHAT_FEED = gql`
             text
             date
             is_from_me
+            handle_id
 
             attachments {
               id
@@ -52,6 +53,7 @@ export const CHAT_MESSAGES = gql`
             text
             date
             is_from_me
+            handle_id
 
             attachments {
               id
@@ -72,6 +74,7 @@ export const SEND_MESSSAGE = gql`
       text
       date
       is_from_me
+      handle_id
 
       attachments {
         id
