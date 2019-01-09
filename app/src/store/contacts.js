@@ -4,7 +4,7 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import _ from 'hibar';
 
 export const normalizePhone = (phone) =>
-  parsePhoneNumberFromString(phone).number;
+  (parsePhoneNumberFromString(phone, 'US') || {}).number || phone;
 
 const contactFullName = (contact) =>
   [contact.givenName, contact.middleName, contact.familyName]
@@ -28,12 +28,12 @@ export const getContacts = () =>
     }
   );
 
-const getContactsByPhone = (contacts) =>
+export const getContactsByPhone = (contacts) =>
   contacts.reduce((memo, contact) => {
     const { recordID, givenName, middleName, familyName } = contact;
     const contactData = { id: recordID, givenName, middleName, familyName };
 
-    contacts.phoneNumbers.forEach((phoneNumber) => {
+    contact.phoneNumbers.forEach((phoneNumber) => {
       const { id, label, number } = phoneNumber;
       memo[normalizePhone(number)] = contactData;
     });
@@ -41,25 +41,16 @@ const getContactsByPhone = (contacts) =>
     return memo;
   }, {});
 
-export const getDisplayNames = (chats, contacts) => {
-  const contactsByPhone = getContactsByPhone(contacts);
+export const getDisplayName = (chat, contactsByPhone = {}) =>
+  chat.handles
+    .map((e) => normalizePhone(e.guid))
+    .map((phone, i, phones) => {
+      const contact = contactsByPhone[phone];
 
-  return chats.map((chat) => {
-    const { handles } = chat;
-    const phones = handles.map((e) => normalizePhone(e.guid));
-
-    const display_name = phones
-      .map((phone) => {
-        const contact = contactsByPhone[phone];
-
-        return contact
-          ? phones.length > 1
-            ? contact.givenName
-            : contactFullName(contact)
-          : phone;
-      })
-      .join(', ');
-
-    return { id: chat.id, display_name };
-  });
-};
+      return contact
+        ? phones.length > 1
+          ? contact.givenName
+          : contactFullName(contact)
+        : phone;
+    })
+    .join(', ');

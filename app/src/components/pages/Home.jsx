@@ -11,6 +11,11 @@ import { Query } from 'react-apollo';
 import Header from '@/components/common/Header';
 import { CHAT_FEED } from '@/store/chat';
 import { getToken } from '@/store/auth';
+import {
+  getContacts,
+  getContactsByPhone,
+  getDisplayName,
+} from '@/store/contacts';
 
 import styles from './Home.scss';
 
@@ -40,6 +45,10 @@ export default class Home extends React.Component {
     </View>
   );
 
+  state = {
+    contactsByPhone: {},
+  };
+
   componentWillMount() {
     const { navigation } = this.props;
 
@@ -48,10 +57,17 @@ export default class Home extends React.Component {
         navigation.replace('Login');
       }
     });
+
+    getContacts().then((contacts) => {
+      const contactsByPhone = getContactsByPhone(contacts);
+      console.log(contactsByPhone);
+      this.setState({ contactsByPhone });
+    });
   }
 
   render() {
     const { navigate } = this.props.navigation;
+    const { contactsByPhone } = this.state;
 
     return (
       <View style={styles.Home}>
@@ -69,17 +85,26 @@ export default class Home extends React.Component {
 
             return (
               <FlatList
-                data={data.chats}
+                data={data.chats
+                  .map((chat) => ({
+                    ...chat,
+                    sort: new Date(chat.messagePage.items[0].date).getTime(),
+                  }))
+                  .sort((a, b) => b.sort - a.sort)}
                 refreshing={data.networkStatus === 4}
                 onRefresh={() => refetch()}
                 renderItem={({ item }) => (
                   <Home.Chat
                     {...item}
-                    display_name={
-                      item.display_name ||
-                      item.handles.map((e) => e.guid).join(', ')
+                    display_name={getDisplayName(item, contactsByPhone)}
+                    onPress={() =>
+                      navigate('Chat', {
+                        item: {
+                          ...item,
+                          display_name: getDisplayName(item, contactsByPhone),
+                        },
+                      })
                     }
-                    onPress={() => navigate('Chat', { item })}
                   />
                 )}
                 keyExtractor={(item, i) => item.guid}

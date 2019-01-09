@@ -94,7 +94,7 @@ export const handleNewMessage = (cache, message, chatId) => {
     },
     data: (data) => {
       data.chat.messagePage.items = data.chat.messagePage.items.filter(
-        (e) => e.id > 0 && e.id !== message.id
+        (e) => e.id !== message.id
       );
       data.chat.messagePage.items.unshift(message);
     },

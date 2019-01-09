@@ -34,7 +34,7 @@ export const subscribe = (client) => [
           messageAdded: { chat, ...message },
         } = data;
 
-        console.log('MESSAGE_ADDED', data);
+        console.log('subscription MESSAGE_ADDED');
         handleNewMessage(client.cache, message, chat.id);
       },
     }),
