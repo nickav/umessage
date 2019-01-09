@@ -14,10 +14,7 @@ import poll from './poll';
 
 /* */
 // Constants
-const PORT = 3001;
-const GRAPHQL_PATH = '/graphql';
-
-async function init() {
+async function init({ host, port }) {
   // Create Koa Server:
   const app = new Koa();
   const router = new Router();
@@ -60,14 +57,14 @@ async function init() {
   });
 
   // Start Server:
-  const httpServer = app.listen({ host: '0.0.0.0', port: PORT }, () => {
+  const httpServer = app.listen({ host, port }, () => {
     console.log(
-      `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+      `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
     );
   });
 
   // Connect Apollo to Koa:
-  server.applyMiddleware({ app, path: GRAPHQL_PATH });
+  server.applyMiddleware({ app, path: '/graphql' });
   server.installSubscriptionHandlers(httpServer);
 
   // Start background polling:
