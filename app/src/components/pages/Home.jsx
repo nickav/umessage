@@ -82,7 +82,7 @@ export default class Home extends React.Component {
     getContacts().then((contacts) => {
       if (!contacts) return;
 
-      AsyncStorage.setItem('contacts', JSON.stringify(contacts));
+      //AsyncStorage.setItem('contacts', JSON.stringify(contacts));
 
       const contactsByPhone = getContactsByPhone(contacts);
       this.setState({ contactsByPhone });
