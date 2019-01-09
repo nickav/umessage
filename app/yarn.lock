@@ -3638,6 +3638,10 @@ react-native-contacts@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-native-contacts/-/react-native-contacts-2.2.5.tgz#5f7ff7b0310a095753ef0491d6e9453dcfc17ff8"
 
+react-native-device-info@^0.24.3:
+  version "0.24.3"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.24.3.tgz#f15eff8d09fe418eaf5e7c89ddaabbc5ed718fd7"
+
 react-native-gesture-handler@^1.0.0, react-native-gesture-handler@^1.0.12:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.0.12.tgz#99a22f90212df299245357dbd3a9a01c788f310b"

@@ -5,6 +5,7 @@ import {
   Button,
   FlatList,
   TouchableNativeFeedback,
+  AsyncStorage,
 } from 'react-native';
 import { Query } from 'react-apollo';
 
@@ -52,15 +53,28 @@ export default class Home extends React.Component {
   componentWillMount() {
     const { navigation } = this.props;
 
+    // check if unauthenticated
     getToken().then((token) => {
       if (!token) {
         navigation.replace('Login');
       }
     });
 
+    // restore contacts from AsyncStorage
+    AsyncStorage.getItem('contacts').then((contacts) => {
+      if (contacts && !this.state.contactsByPhone) {
+        const contactsByPhone = getContactsByPhone(JSON.parse(contacts));
+        this.setState({ contactsByPhone });
+      }
+    });
+
+    // load new contacts
     getContacts().then((contacts) => {
+      if (!contacts) return;
+
+      AsyncStorage.setItem('contacts', JSON.stringify(contacts));
+
       const contactsByPhone = getContactsByPhone(contacts);
-      console.log(contactsByPhone);
       this.setState({ contactsByPhone });
     });
   }

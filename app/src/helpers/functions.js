@@ -1,4 +1,8 @@
 import dayjs from 'dayjs';
+import DeviceInfo from 'react-native-device-info';
+
+const is24Hour = DeviceInfo.is24Hour();
+const timeFormat = is24Hour ? 'HH:mm' : 'h:mm a';
 
 const formatCalendarDate = (date, fn, referenceTime = null) => {
   const then = dayjs(date);
@@ -13,13 +17,13 @@ const newestLastSort = (a, b) =>
 export const prettyTimeShort = (ms) =>
   formatCalendarDate(
     ms,
-    (diff) => (diff < 7 ? 'ddd, h:mm a' : 'MMM D, h:mm a')
+    (diff) => (diff < 7 ? `ddd, ${timeFormat}` : `MMM D, ${timeFormat}`)
   );
 
 export const prettyTime = (ms) =>
   formatCalendarDate(
     ms,
-    (diff) => (diff < 7 ? 'dddd • h:mm a' : 'dddd, MMM D • h:mm a')
+    (diff) => (diff < 7 ? `dddd • ${timeFormat}` : `dddd, MMM D • ${timeFormat}`)
   );
 
 export const getFakeId = (() => {

@@ -33,7 +33,7 @@ const Navigator = createStackNavigator(routes, {
 const AppContainer = createAppContainer(Navigator);
 
 class App extends React.Component {
-  componentDidMount() {
+  componentWillMount() {
     AppState.addEventListener('change', this.onAppStateChange);
   }
 
