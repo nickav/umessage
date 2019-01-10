@@ -36,7 +36,7 @@ const AppContainer = createAppContainer(Navigator);
 class App extends React.Component {
   componentWillMount() {
     AppState.addEventListener('change', this.onAppStateChange);
-    notifications.init();
+    notifications.init().then((token) => console.log('fcmToken', token));
 
     this.notificationListeners = notifications.createListeners();
   }
@@ -50,7 +50,7 @@ class App extends React.Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.onAppStateChange);
-    this.notificationListeners.forEach(unsubscribe => unsubscribe());
+    this.notificationListeners.forEach((unsubscribe) => unsubscribe());
   }
 
   render() {

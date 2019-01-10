@@ -1,5 +1,6 @@
 import { onMessageAdded } from './resolvers/Subscription';
 import { transformMessage } from './resolvers/helpers';
+import * as notifications from './notifications';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -52,7 +53,26 @@ export default (ctx, options) => {
     console.log(`Recieved ${messages.length} message(s).`);
 
     for (let i = messages.length - 1; i >= 0; i--) {
-      onMessageAdded(messages[i]);
+      const message = messages[i];
+
+      // send message to pubsub
+      onMessageAdded(message);
+
+      // send notification to devices
+      if (!message.is_from_me) {
+        const token =
+          'es9dsu_zP30:APA91bFZwUZ2Onbs7SOKlxs4aO6BMO_tfPtiD64_HlFadx_7uasWmmaPHuK3mpzkXCNhTkE9UB3F9qCXFx7EVa6bPed_H9n3353LWXx7D3SP678UOL66No9VMs7Qg_I6-b_LFcjdRJoW';
+
+        notifications.push(
+          token,
+          {
+            body: message.text,
+          },
+          {
+            message: JSON.stringify(message),
+          }
+        );
+      }
     }
   });
 

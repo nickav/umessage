@@ -28,6 +28,7 @@
     "bcrypt": "^3.0.3",
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
+    "firebase-admin": "^6.5.0",
     "got": "^9.5.0",
     "graphql": "^14.0.2",
     "graphql-date": "^1.0.3",

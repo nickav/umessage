@@ -11,6 +11,7 @@ import createDatabase from './db';
 import { typeDefs, resolvers, schemaDirectives, createContext } from './data';
 import attachment from './attachment';
 import poll from './poll';
+import * as notifications from './notifications';
 
 /* */
 // Constants
@@ -69,6 +70,9 @@ async function init({ host, port }) {
 
   // Start background polling:
   poll(app.context, { interval: 400 });
+
+  // Setup push notification service
+  notifications.init();
 }
 
 export default init;

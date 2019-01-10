@@ -6,12 +6,15 @@ export const getToken = async () => {
 
   if (!token) {
     token = await firebase.messaging().getToken();
+    console.log('token', token);
+
     if (token) {
       // user has a device token
       await AsyncStorage.setItem('fcmToken', token);
-      return token;
     }
   }
+
+  return token;
 };
 
 export const init = async () => {
