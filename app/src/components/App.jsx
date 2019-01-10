@@ -9,6 +9,7 @@ import { ApolloProvider } from 'react-apollo';
 
 import client from '@/store/client';
 import * as subscriptions from '@/store/subs';
+import * as notifications from '@/store/notifications';
 import * as pages from '@/components/pages';
 
 import styles from './App.scss';
@@ -35,6 +36,9 @@ const AppContainer = createAppContainer(Navigator);
 class App extends React.Component {
   componentWillMount() {
     AppState.addEventListener('change', this.onAppStateChange);
+    notifications.init();
+
+    this.notificationListeners = notifications.createListeners();
   }
 
   onAppStateChange = (appState) => {
@@ -46,6 +50,7 @@ class App extends React.Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.onAppStateChange);
+    this.notificationListeners.forEach(unsubscribe => unsubscribe());
   }
 
   render() {
