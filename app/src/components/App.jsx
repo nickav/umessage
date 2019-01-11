@@ -1,6 +1,10 @@
 import React from 'react';
 import { AppState } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import {
+  createStackNavigator,
+  createAppContainer,
+  NavigationActions,
+} from 'react-navigation';
 import { ApolloProvider } from 'react-apollo';
 
 import client from '@/store/client';
@@ -34,7 +38,16 @@ class App extends React.Component {
     AppState.addEventListener('change', this.onAppStateChange);
     notifications.init().then((token) => console.log('fcmToken', token));
 
-    //this.notificationListeners = notifications.createListeners();
+    this.notificationListeners = notifications.createListeners({
+      onOpen: (notification) => {
+        console.log('onOpen', notification);
+        /*
+        this.navigator.dispatch(
+          NavigationActions.navigate({ routeName: 'Chat', params: { } })
+        );
+        */
+      },
+    });
   }
 
   onAppStateChange = (appState) => {
@@ -46,7 +59,7 @@ class App extends React.Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.onAppStateChange);
-    //this.notificationListeners.forEach((unsubscribe) => unsubscribe());
+    this.notificationListeners.forEach((unsubscribe) => unsubscribe());
   }
 
   render() {
@@ -54,7 +67,11 @@ class App extends React.Component {
 
     return (
       <ApolloProvider client={client}>
-        <AppContainer />
+        <AppContainer
+          ref={(nav) => {
+            this.navigator = nav;
+          }}
+        />
       </ApolloProvider>
     );
   }

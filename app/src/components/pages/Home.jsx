@@ -132,9 +132,9 @@ export default class Home extends React.Component {
               }))
               .sort((a, b) => b.sort - a.sort);
 
-            const dataProvider = new DataProvider((r1, r2) => r1.id !== r2.id);
-            dataProvider.rowHasChanged = (prev, curr) =>
-              prev.sort !== curr.sort;
+            const dataProvider = new DataProvider(
+              (r1, r2) => r1.id !== r2.id || r1.sort !== r2.sort
+            );
 
             return (
               <RecyclerListView

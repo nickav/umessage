@@ -15,7 +15,7 @@ const formatCalendarDate = (date, fn, referenceTime = null) => {
 const minutesAgo = (days) => ~~(days * (24 * 60));
 const hoursAgo = (days) => ~~(days * 24);
 
-const timeFromNow = days => {
+const timeFromNow = (days) => {
   const mins = ~~(days * 24 * 60);
   const hours = ~~(days * 24);
 
@@ -28,11 +28,11 @@ const timeFromNow = days => {
   }
 
   if (hours < 24) {
-    return `[${hours} hr]`
+    return `[${hours} hr]`;
   }
 
   return timeFormat;
-}
+};
 
 export const prettyTimeShort = (ms) =>
   formatCalendarDate(
@@ -45,11 +45,7 @@ export const prettyTimeTiny = (ms) =>
     if (diff < 1) {
       const mins = minutesAgo(days);
 
-      return mins < 1
-        ? '[Now]'
-        : mins < 60
-          ? `[${mins} min]`
-          : timeFormat;
+      return mins < 1 ? '[Now]' : mins < 60 ? `[${mins} min]` : timeFormat;
     }
 
     return diff < 7 ? `ddd` : `MMM D`;
@@ -67,10 +63,27 @@ export const getFakeId = (() => {
   return () => --id;
 })();
 
-const transformChatSections2 = (messages, insertTimesAfter = 3600000) => {
-  return messages.reduce((sections, message) => {
-    const section = sections[sections.length - 1];
+export const arrCollect = (arr, equals = () => false) =>
+  arr.reduce((result, curr, i, arr) => {
+    const group = result[result.length - 1];
+    const prev = group[group.length - 1];
 
-    return sections;
-  }, []);
-}
+    if (equals(prev, curr, group, i, arr)) {
+      group.push(curr);
+    } else {
+      result.push([curr]);
+    }
+
+    return result;
+  }, arr.length ? [[arr[0]]] : []);
+
+const transformChatSections = (messages, insertTimesAfter = 3600000) =>
+  arrCollect(
+    messages.map((m) => ({
+      ...m,
+      createdAtTime: new Date(m.createdAt).getTime(),
+    })),
+    (a, b) =>
+      a.from.id === b.from.id &&
+      Math.abs(a.createdAtTime - b.createdAtTime) < insertTimesAfter
+  );
