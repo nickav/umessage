@@ -25,10 +25,3 @@ const message = {
 */
 
 export const send = (message) => firebase.messaging().send(message);
-
-export const push = (deviceToken, notification, data) =>
-  send({
-    notification,
-    data,
-    token: deviceToken,
-  });

@@ -63,15 +63,17 @@ export default (ctx, options) => {
         const token =
           'es9dsu_zP30:APA91bFZwUZ2Onbs7SOKlxs4aO6BMO_tfPtiD64_HlFadx_7uasWmmaPHuK3mpzkXCNhTkE9UB3F9qCXFx7EVa6bPed_H9n3353LWXx7D3SP678UOL66No9VMs7Qg_I6-b_LFcjdRJoW';
 
-        notifications.push(
+        notifications.send({
           token,
-          {
+          notification: {
+            title: `${message.handle_id}`,
             body: message.text,
           },
-          {
+          data: {
             message: JSON.stringify(message),
-          }
-        );
+            handle_id: `${message.handle_id}`,
+          },
+        });
       }
     }
   });

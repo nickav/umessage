@@ -36,19 +36,12 @@ export default class Home extends React.Component {
         )}
       >
         <View style={styles.inner}>
-          <View style={styles.left}>
-            <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-              {display_name}
-            </Text>
-            <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
-              {messagePage.items[0].text}
-            </Text>
-          </View>
-          <View style={styles.right}>
-            <Text style={styles.text} numberOfLines={1}>
-              {prettyTimeTiny(messagePage.items[0].date)}
-            </Text>
-          </View>
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+            {display_name}
+          </Text>
+          <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
+            {messagePage.items[0].text}
+          </Text>
         </View>
       </TouchableNativeFeedback>
     </View>
@@ -69,30 +62,42 @@ export default class Home extends React.Component {
     });
 
     // restore contacts from AsyncStorage
-    /*
     AsyncStorage.getItem('contacts').then((contacts) => {
       if (contacts && !this.state.contactsByPhone) {
         const contactsByPhone = getContactsByPhone(JSON.parse(contacts));
         this.setState({ contactsByPhone });
       }
     });
-    */
 
     // load new contacts
     getContacts().then((contacts) => {
       if (!contacts) return;
 
-      //AsyncStorage.setItem('contacts', JSON.stringify(contacts));
+      AsyncStorage.setItem('contacts', JSON.stringify(contacts));
 
       const contactsByPhone = getContactsByPhone(contacts);
       this.setState({ contactsByPhone });
     });
   }
 
-  render() {
+  renderItem = ({ item }) => {
     const { navigate } = this.props.navigation;
     const { contactsByPhone } = this.state;
+    const display_name = getDisplayName(item, contactsByPhone);
 
+    return (
+      <Home.Chat
+        {...item}
+        display_name={display_name}
+        onPress={() => navigate('Chat', { item: { ...item, display_name } })}
+      />
+    );
+  };
+
+  keyExtractor = (item) => Math.random().toString();
+  //keyExtractor = (item) => item.id.toString();
+
+  render() {
     return (
       <View style={styles.Home}>
         <Header />
@@ -107,31 +112,22 @@ export default class Home extends React.Component {
               return <Text style={styles.text}>Something went wrong.</Text>;
             }
 
+            const chats = data.chats
+              .map((chat) => ({
+                ...chat,
+                sort: new Date(chat.messagePage.items[0].date).getTime(),
+              }))
+              .sort((a, b) => b.sort - a.sort);
+
             return (
               <FlatList
-                data={data.chats
-                  .map((chat) => ({
-                    ...chat,
-                    sort: new Date(chat.messagePage.items[0].date).getTime(),
-                  }))
-                  .sort((a, b) => b.sort - a.sort)}
+                data={chats}
                 refreshing={data.networkStatus === 4}
+                initialNumToRender={12}
                 onRefresh={() => refetch()}
-                renderItem={({ item }) => (
-                  <Home.Chat
-                    {...item}
-                    display_name={getDisplayName(item, contactsByPhone)}
-                    onPress={() =>
-                      navigate('Chat', {
-                        item: {
-                          ...item,
-                          display_name: getDisplayName(item, contactsByPhone),
-                        },
-                      })
-                    }
-                  />
-                )}
-                keyExtractor={(item, i) => item.id.toString()}
+                renderItem={this.renderItem}
+                keyExtractor={this.keyExtractor}
+                extraData={{ chats, state: this.state }}
               />
             );
           }}

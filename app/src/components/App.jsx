@@ -1,10 +1,6 @@
 import React from 'react';
 import { AppState } from 'react-native';
-import {
-  createStackNavigator,
-  createAppContainer,
-  addNavigationHelpers,
-} from 'react-navigation';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 import { ApolloProvider } from 'react-apollo';
 
 import client from '@/store/client';
