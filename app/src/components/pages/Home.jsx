@@ -3,11 +3,17 @@ import {
   Text,
   View,
   Button,
-  FlatList,
   TouchableNativeFeedback,
   AsyncStorage,
+  Dimensions,
+  RefreshControl,
 } from 'react-native';
 import { Query } from 'react-apollo';
+import {
+  RecyclerListView,
+  DataProvider,
+  LayoutProvider,
+} from 'recyclerlistview';
 
 import Header from '@/components/common/Header';
 import { CHAT_FEED } from '@/store/chat';
@@ -54,6 +60,16 @@ export default class Home extends React.Component {
   componentWillMount() {
     const { navigation } = this.props;
 
+    const { width } = Dimensions.get('window');
+
+    this._layoutProvider = new LayoutProvider(
+      (index) => 0,
+      (type, dim) => {
+        dim.width = width;
+        dim.height = 64;
+      }
+    );
+
     // check if unauthenticated
     getToken().then((token) => {
       if (!token) {
@@ -80,7 +96,7 @@ export default class Home extends React.Component {
     });
   }
 
-  renderItem = ({ item }) => {
+  renderItem = (type, item) => {
     const { navigate } = this.props.navigation;
     const { contactsByPhone } = this.state;
     const display_name = getDisplayName(item, contactsByPhone);
@@ -93,9 +109,6 @@ export default class Home extends React.Component {
       />
     );
   };
-
-  keyExtractor = (item) => Math.random().toString();
-  //keyExtractor = (item) => item.id.toString();
 
   render() {
     return (
@@ -119,15 +132,19 @@ export default class Home extends React.Component {
               }))
               .sort((a, b) => b.sort - a.sort);
 
+            const dataProvider = new DataProvider((r1, r2) => r1.id !== r2.id);
+
             return (
-              <FlatList
-                data={chats}
-                refreshing={data.networkStatus === 4}
-                initialNumToRender={12}
-                onRefresh={() => refetch()}
-                renderItem={this.renderItem}
-                keyExtractor={this.keyExtractor}
-                extraData={{ chats, state: this.state }}
+              <RecyclerListView
+                refreshControl={
+                  <RefreshControl
+                    refreshing={data.networkStatus === 4}
+                    onRefresh={() => refetch()}
+                  />
+                }
+                layoutProvider={this._layoutProvider}
+                dataProvider={dataProvider.cloneWithRows(chats)}
+                rowRenderer={this.renderItem}
               />
             );
           }}
