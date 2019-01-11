@@ -34,7 +34,7 @@ class App extends React.Component {
     AppState.addEventListener('change', this.onAppStateChange);
     notifications.init().then((token) => console.log('fcmToken', token));
 
-    this.notificationListeners = notifications.createListeners();
+    //this.notificationListeners = notifications.createListeners();
   }
 
   onAppStateChange = (appState) => {
@@ -46,7 +46,7 @@ class App extends React.Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.onAppStateChange);
-    this.notificationListeners.forEach((unsubscribe) => unsubscribe());
+    //this.notificationListeners.forEach((unsubscribe) => unsubscribe());
   }
 
   render() {

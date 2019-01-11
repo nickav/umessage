@@ -134,9 +134,13 @@ export default class Chat extends React.Component {
                             variables: { id, page: { size: 30, cursor } },
                             updateQuery: (prev, { fetchMoreResult }) => {
                               if (!fetchMoreResult) return prev;
+
+                              console.log('fetchMore', cursor);
+
                               fetchMoreResult.chat.messagePage.items.unshift(
                                 ...prev.chat.messagePage.items
                               );
+
                               return fetchMoreResult;
                             },
                           });
@@ -168,9 +172,11 @@ export default class Chat extends React.Component {
                 date: new Date().toISOString(),
                 is_from_me: true,
                 attachments: null,
+                handle_id: id
               },
             }}
             update={(cache, { data: { sendMessage } }) => {
+              console.log('sendMessage');
               handleNewMessage(cache, sendMessage, id);
             }}
           >

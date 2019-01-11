@@ -9,6 +9,7 @@ export const MESSAGE_ADDED = gql`
       text
       date
       is_from_me
+      handle_id
 
       chat {
         id

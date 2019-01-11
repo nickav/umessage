@@ -96,10 +96,14 @@ export const handleNewMessage = (cache, message, chatId) => {
       page: { size: 30 },
     },
     data: (data) => {
-      data.chat.messagePage.items = data.chat.messagePage.items.filter(
-        (e) => e.id !== message.id
+      const { messagePage } = data.chat;
+
+      messagePage.items = messagePage.items.filter(
+        (e) => e.id > 0
       );
-      data.chat.messagePage.items.unshift(message);
+      messagePage.items.unshift(message);
+
+      console.log(message, messagePage.items.map(e => ({ id: e.id, text: e.text, is_from_me: e.is_from_me })))
     },
   });
 

@@ -125,7 +125,7 @@ export default class Home extends React.Component {
               return <Text style={styles.text}>Something went wrong.</Text>;
             }
 
-            const chats = data.chats
+            const chats = (data.chats || [])
               .map((chat) => ({
                 ...chat,
                 sort: new Date(chat.messagePage.items[0].date).getTime(),
@@ -133,6 +133,8 @@ export default class Home extends React.Component {
               .sort((a, b) => b.sort - a.sort);
 
             const dataProvider = new DataProvider((r1, r2) => r1.id !== r2.id);
+            dataProvider.rowHasChanged = (prev, curr) =>
+              prev.sort !== curr.sort;
 
             return (
               <RecyclerListView
