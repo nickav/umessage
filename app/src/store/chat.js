@@ -102,8 +102,6 @@ export const handleNewMessage = (cache, message, chatId) => {
         (e) => e.id > 0
       );
       messagePage.items.unshift(message);
-
-      console.log(message, messagePage.items.map(e => ({ id: e.id, text: e.text, is_from_me: e.is_from_me })))
     },
   });
 

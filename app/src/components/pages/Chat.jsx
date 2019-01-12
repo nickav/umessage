@@ -19,7 +19,7 @@ import { prettyTimeShort, prettyTime, getFakeId } from '@/helpers/functions';
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => {
-    const { handles, display_name } = navigation.state.params.item || {};
+    const { handles, display_name } = navigation.state.params.chat || {};
     return {
       title: display_name || handles.map((e) => e.guid).join(', '),
       headerRight: (
@@ -100,7 +100,7 @@ export default class Chat extends React.Component {
 
     const { text, expanded } = this.state;
 
-    const { id, handles } = state.params.item;
+    const { id, handles } = state.params.chat;
 
     return (
       <View style={styles.Chat}>

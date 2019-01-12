@@ -13,8 +13,9 @@ const getLastNMessages = async (db, n = 1) =>
   await db
     .all(
       `
-      SELECT ${db.getMessageProps()} from message
-      ORDER BY date DESC
+      SELECT ${db.getMessageProps()}, chat_id from message
+      JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
+      ORDER BY id DESC
       LIMIT ${n};
     `
     )
@@ -63,6 +64,7 @@ export default (ctx, options) => {
         const token =
           'es9dsu_zP30:APA91bFZwUZ2Onbs7SOKlxs4aO6BMO_tfPtiD64_HlFadx_7uasWmmaPHuK3mpzkXCNhTkE9UB3F9qCXFx7EVa6bPed_H9n3353LWXx7D3SP678UOL66No9VMs7Qg_I6-b_LFcjdRJoW';
 
+        console.log('notifying device', token, message);
         notifications.send({
           token,
           notification: {
@@ -71,7 +73,7 @@ export default (ctx, options) => {
           },
           data: {
             message: JSON.stringify(message),
-            handle_id: `${message.handle_id}`,
+            chat_id: `${message.chat_id}`,
           },
         });
       }

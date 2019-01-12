@@ -36,18 +36,29 @@ const AppContainer = createAppContainer(Navigator);
 class App extends React.Component {
   componentWillMount() {
     AppState.addEventListener('change', this.onAppStateChange);
-    notifications.init().then((token) => console.log('fcmToken', token));
+    notifications
+      .init()
+      .then((token) => console.log('fcmToken', token))
+      .then(() => {
+        this.notificationListeners = notifications.createListeners({
+          onOpen: (notification) => {
+            console.log('onOpen', notification);
 
-    this.notificationListeners = notifications.createListeners({
-      onOpen: (notification) => {
-        console.log('onOpen', notification);
-        /*
-        this.navigator.dispatch(
-          NavigationActions.navigate({ routeName: 'Chat', params: { } })
-        );
-        */
-      },
-    });
+            this.navigator.dispatch(
+              NavigationActions.navigate({
+                routeName: 'Chat',
+                params: {
+                  chat: {
+                    id: parseInt(notification.data.chat_id, 10),
+                    display_name: 'From notification',
+                    handles: [],
+                  },
+                },
+              })
+            );
+          },
+        });
+      });
   }
 
   onAppStateChange = (appState) => {
@@ -59,7 +70,11 @@ class App extends React.Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.onAppStateChange);
-    this.notificationListeners.forEach((unsubscribe) => unsubscribe());
+
+    if (this.notificationListeners) {
+      this.notificationListeners.forEach((unsubscribe) => unsubscribe());
+      this.notificationListeners = null;
+    }
   }
 
   render() {

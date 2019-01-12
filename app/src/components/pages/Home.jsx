@@ -42,12 +42,19 @@ export default class Home extends React.Component {
         )}
       >
         <View style={styles.inner}>
-          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-            {display_name}
-          </Text>
-          <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
-            {messagePage.items[0].text}
-          </Text>
+          <View style={styles.left}>
+            <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+              {display_name}
+            </Text>
+            <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
+              {messagePage.items[0].text}
+            </Text>
+          </View>
+          <View style={styles.right}>
+            <Text style={styles.text} numberOfLines={1}>
+              {prettyTimeTiny(messagePage.items[0].date)}
+            </Text>
+          </View>
         </View>
       </TouchableNativeFeedback>
     </View>
@@ -105,7 +112,7 @@ export default class Home extends React.Component {
       <Home.Chat
         {...item}
         display_name={display_name}
-        onPress={() => navigate('Chat', { item: { ...item, display_name } })}
+        onPress={() => navigate('Chat', { chat: { ...item, display_name } })}
       />
     );
   };
