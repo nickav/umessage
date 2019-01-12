@@ -92,6 +92,9 @@ export default gql`
 
     # create a new message
     sendMessage(handleGuids: [String]!, text: String!): Message @auth
+
+    # set device token for notifications
+    setDeviceToken(token: String!): Boolean
   }
 
   type Subscription {

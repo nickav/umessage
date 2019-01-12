@@ -83,7 +83,9 @@ export default class Home extends React.Component {
         navigation.replace('Login');
       }
     });
+  }
 
+  componentDidMount() {
     // restore contacts from AsyncStorage
     AsyncStorage.getItem('contacts').then((contacts) => {
       if (contacts && !this.state.contactsByPhone) {
@@ -118,6 +120,8 @@ export default class Home extends React.Component {
   };
 
   render() {
+    const { contactsByPhone } = this.state;
+
     return (
       <View style={styles.Home}>
         <Header />
@@ -154,6 +158,7 @@ export default class Home extends React.Component {
                 layoutProvider={this._layoutProvider}
                 dataProvider={dataProvider.cloneWithRows(chats)}
                 rowRenderer={this.renderItem}
+                extendedState={contactsByPhone}
               />
             );
           }}

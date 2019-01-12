@@ -25,4 +25,8 @@ export default {
         return null;
       });
   },
+
+  setDeviceToken: (_, { token }, ctx) => {
+    return true;
+  },
 };
