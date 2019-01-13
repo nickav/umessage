@@ -90,8 +90,11 @@ export default gql`
     # sign in user
     auth(email: String!, password: String!): String
 
-    # create a new message
+    # create a new message to arbitrary phone numbers
     sendMessage(handleGuids: [String]!, text: String!): Message @auth
+
+    # send message to a particular chat
+    sendMessageToChat(chatId: Int!, text: String!): Message @auth
 
     # set device token for notifications
     setToken(token: String!): Boolean

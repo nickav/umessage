@@ -89,13 +89,11 @@ class App extends React.Component {
     const { props } = this;
 
     return (
-      <ApolloProvider client={client}>
-        <AppContainer
-          ref={(nav) => {
-            this.navigator = nav;
-          }}
-        />
-      </ApolloProvider>
+      <AppContainer
+        ref={(nav) => {
+          this.navigator = nav;
+        }}
+      />
     );
   }
 }
