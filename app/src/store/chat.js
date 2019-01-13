@@ -116,9 +116,17 @@ export const handleNewMessage = (cache, message, chatId) => {
     data: (data) => {
       const { messagePage } = data.chat;
 
-      messagePage.items = messagePage.items.filter(
-        (e) => e.id > 0
-      );
+      // update existing message
+      const index = messagePage.items.findIndex((e) => e.id === message.id);
+      if (index >= 0) {
+        messagePage.items = messagePage.items.map(
+          (e) => (e.id === message.id ? message : e)
+        );
+        return;
+      }
+
+      // append new message
+      messagePage.items = messagePage.items.filter((e) => e.id > 0);
       messagePage.items.unshift(message);
     },
   });
