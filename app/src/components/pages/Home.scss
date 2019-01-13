@@ -13,6 +13,8 @@
 
 .inner {
   display: flex;
+  flex-direction: row;
+  align-items: center;
   flex: 1;
   padding: 12px 32px;
 }
@@ -24,7 +26,6 @@
 
 .right {
   display: flex;
-  flex: 1;
   margin-left: auto;
   padding-left: 16px;
 }
