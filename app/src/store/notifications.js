@@ -1,5 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 export const getToken = async () => {
   let token = await AsyncStorage.getItem('fcmToken');
@@ -68,3 +70,19 @@ export const createListeners = ({ onOpen, onNotification } = {}) => {
     }),
   ];
 };
+
+const SET_TOKEN = gql`
+  mutation($token: String!) {
+    setToken(token: $token)
+  }
+`;
+
+export const setTokenMutation = graphql(SET_TOKEN, {
+  props: ({ ownProps, mutate }) => ({
+    setToken: (token) =>
+      mutate({
+        variables: { token },
+        update: (cache, { data: { setToken } }) => {},
+      }),
+  }),
+});

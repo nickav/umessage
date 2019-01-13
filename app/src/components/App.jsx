@@ -35,11 +35,16 @@ const AppContainer = createAppContainer(Navigator);
 
 class App extends React.Component {
   componentDidMount() {
+    const { setToken } = this.props;
+
     AppState.addEventListener('change', this.onAppStateChange);
 
     notifications
       .init()
-      .then((token) => console.log('fcmToken', token))
+      .then((token) => {
+        console.log('setToken', token);
+        setToken(token);
+      })
       .then(() => this.createListeners());
   }
 
@@ -95,4 +100,10 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const EnhancedApp = notifications.setTokenMutation(App);
+
+export default () => (
+  <ApolloProvider client={client}>
+    <EnhancedApp />
+  </ApolloProvider>
+);

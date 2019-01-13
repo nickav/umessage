@@ -106,10 +106,12 @@ export default class Home extends React.Component {
     });
 
     // re-render RecyclerListView every 30 seconds
-    this.tick = setInterval(() => {
-      this.setState({ forceUpdate: Date.now() });
-    }, 30 * 1000);
+    this.tick = setInterval(this.forceUpdate, 30 * 1000);
   }
+
+  forceUpdate = () => {
+    this.setState({ forceUpdate: Date.now() });
+  };
 
   componentWillUnmount() {
     clearInterval(this.tick);

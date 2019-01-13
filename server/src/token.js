@@ -14,8 +14,8 @@ export const getToken = () => {
     return Promise.resolve(inMemoryToken);
   }
 
-  return readFile(getTokenPath())
-    .then((token) => token)
+  return readFile(getTokenPath(), 'utf8')
+    .then((contents) => contents.toString())
     .catch((err) => {
       console.error('Failed reading token', err);
       return '';
@@ -23,9 +23,10 @@ export const getToken = () => {
 };
 
 export const setToken = (token) => {
-  return writeFile(getTokenPath(), token)
+  return writeFile(getTokenPath(), token, 'utf8')
     .then(() => {
       inMemoryToken = token;
+      console.log('setToken', token);
       return true;
     })
     .catch((err) => {

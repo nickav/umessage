@@ -54,31 +54,30 @@ export default (ctx, options) => {
   const cancel = pollMessages(ctx.db, config.interval, (messages) => {
     console.log(`Recieved ${messages.length} message(s).`);
 
-    for (let i = messages.length - 1; i >= 0; i--) {
-      const message = messages[i];
+    getToken().then((token) => {
+      for (let i = messages.length - 1; i >= 0; i--) {
+        const message = messages[i];
 
-      // send message to pubsub
-      onMessageAdded(message);
+        // send message to pubsub
+        onMessageAdded(message);
 
-      // send notification to devices
-      if (!message.is_from_me) {
-        const token =
-          'es9dsu_zP30:APA91bFZwUZ2Onbs7SOKlxs4aO6BMO_tfPtiD64_HlFadx_7uasWmmaPHuK3mpzkXCNhTkE9UB3F9qCXFx7EVa6bPed_H9n3353LWXx7D3SP678UOL66No9VMs7Qg_I6-b_LFcjdRJoW';
-
-        console.log('notifying device', token, message);
-        notifications.send({
-          token,
-          notification: {
-            title: `${message.handle_id}`,
-            body: message.text,
-          },
-          data: {
-            message: JSON.stringify(message),
-            chat_id: `${message.chat_id}`,
-          },
-        });
+        // send notification to devices
+        if (token && !message.is_from_me) {
+          console.log('notifying device', token, message);
+          notifications.send({
+            token,
+            notification: {
+              title: `${message.handle_id}`,
+              body: message.text,
+            },
+            data: {
+              message: JSON.stringify(message),
+              chat_id: `${message.chat_id}`,
+            },
+          });
+        }
       }
-    }
+    });
   });
 
   return { cancel };
