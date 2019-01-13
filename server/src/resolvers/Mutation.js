@@ -1,6 +1,7 @@
 import { sendMessage } from '../imessage';
 import { auth } from '../auth';
 import { fromAppleTime } from './helpers';
+import { setToken } from '../token';
 
 export default {
   auth: (_, args, ctx) => auth(ctx, args),
@@ -26,7 +27,9 @@ export default {
       });
   },
 
-  setDeviceToken: (_, { token }, ctx) => {
-    return true;
+  setToken: (_, { token }, ctx) => {
+    return setToken(token)
+      .then(() => true)
+      .catch(() => false);
   },
 };

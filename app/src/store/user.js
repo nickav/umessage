@@ -5,3 +5,9 @@ export const LOGIN = gql`
     auth(email: $email, password: $password)
   }
 `;
+
+export const SET_TOKEN = gql`
+  mutation($token: String!) {
+    setToken(token: $token)
+  }
+`;

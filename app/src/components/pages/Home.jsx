@@ -62,6 +62,7 @@ export default class Home extends React.Component {
 
   state = {
     contactsByPhone: {},
+    forceUpdate: 0,
   };
 
   componentWillMount() {
@@ -103,6 +104,15 @@ export default class Home extends React.Component {
       const contactsByPhone = getContactsByPhone(contacts);
       this.setState({ contactsByPhone });
     });
+
+    // re-render RecyclerListView every 30 seconds
+    this.tick = setInterval(() => {
+      this.setState({ forceUpdate: Date.now() });
+    }, 30 * 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.tick);
   }
 
   renderItem = (type, item) => {
@@ -120,8 +130,6 @@ export default class Home extends React.Component {
   };
 
   render() {
-    const { contactsByPhone } = this.state;
-
     return (
       <View style={styles.Home}>
         <Header />
@@ -158,7 +166,7 @@ export default class Home extends React.Component {
                 layoutProvider={this._layoutProvider}
                 dataProvider={dataProvider.cloneWithRows(chats)}
                 rowRenderer={this.renderItem}
-                extendedState={contactsByPhone}
+                extendedState={this.state}
               />
             );
           }}

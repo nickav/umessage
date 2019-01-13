@@ -1,6 +1,7 @@
 import { onMessageAdded } from './resolvers/Subscription';
 import { transformMessage } from './resolvers/helpers';
 import * as notifications from './notifications';
+import { getToken } from './token';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
