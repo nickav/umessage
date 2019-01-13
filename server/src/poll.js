@@ -55,28 +55,28 @@ export default (ctx, options) => {
     console.log(`Recieved ${messages.length} message(s).`);
 
     getToken().then((token) => {
-      for (let i = messages.length - 1; i >= 0; i--) {
-        const message = messages[i];
-
+      messages.reverse().forEach((message) => {
         // send message to pubsub
         onMessageAdded(message);
 
-        // send notification to devices
-        if (token && !message.is_from_me) {
-          console.log('notifying device', token, message);
-          notifications.send({
-            token,
-            notification: {
-              title: `${message.handle_id}`,
-              body: message.text,
-            },
-            data: {
-              message: JSON.stringify(message),
-              chat_id: `${message.chat_id}`,
-            },
-          });
+        if (!token || message.is_from_me) {
+          return;
         }
-      }
+
+        // send notification to devices
+        console.log('notifying device', token, message);
+        notifications.send({
+          token,
+          notification: {
+            title: `${message.handle_id}`,
+            body: message.text,
+          },
+          data: {
+            message: JSON.stringify(message),
+            chat_id: `${message.chat_id}`,
+          },
+        });
+      });
     });
   });
 

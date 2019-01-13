@@ -8,19 +8,18 @@ import config from './config';
 const signJwt = promisify(jsonwebtoken.sign);
 const decodeJwt = promisify(jsonwebtoken.decode);
 
+const createJwt = (data) =>
+  signJwt(data, config.JWT_SECRET, { expiresIn: '1y' });
+
 export const auth = (ctx, { email, password }) => {
   // allow any user in dev to authenticate
   if (process.env.NODE_ENV === 'development') {
-    const data = { email };
-    return signJwt(data, config.JWT_SECRET, { expiresIn: '1y' });
+    return createJwt({ email });
   }
 
   if (config.USER_EMAIL === email) {
     return bcrypt.compare(password, config.USER_PASSWORD).then((valid) => {
-      if (!valid) return Promise.resolve(null);
-
-      const data = { email };
-      return signJwt(data, config.JWT_SECRET, { expiresIn: '1y' });
+      return valid ? createJwt({ email }) : null;
     });
   }
 
