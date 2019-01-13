@@ -85,6 +85,24 @@ export const SEND_MESSSAGE = gql`
   }
 `;
 
+export const SEND_MESSSAGE_TO_CHAT = gql`
+  mutation($chatId: Int!, $text: String!) {
+    sendMessageToChat(chatId: $chatId, text: $text) {
+      id
+      text
+      date
+      is_from_me
+      handle_id
+
+      attachments {
+        id
+        mime_type
+        total_bytes
+      }
+    }
+  }
+`;
+
 export const handleNewMessage = (cache, message, chatId) => {
   console.log('handleNewMessage', message, chatId);
 

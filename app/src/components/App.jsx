@@ -53,13 +53,15 @@ class App extends React.Component {
       onOpen: (notification) => {
         console.log('onOpen', notification);
 
+        const chatId = parseInt(notification.data.chat_id, 10);
+
         this.navigator.dispatch(
           NavigationActions.navigate({
             routeName: 'Chat',
             params: {
               chat: {
-                id: parseInt(notification.data.chat_id, 10),
-                display_name: 'From notification',
+                id: chatId,
+                display_name: `Chat ${chatId}`,
                 handles: [],
               },
             },

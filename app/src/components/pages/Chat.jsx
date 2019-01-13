@@ -13,7 +13,11 @@ import { Linking, TouchableHighlight } from 'react-native';
 import styles from './Chat.scss';
 import Header from '@/components/common/Header';
 import TextInput from '@/components/common/TextInput';
-import { CHAT_MESSAGES, SEND_MESSSAGE, handleNewMessage } from '@/store/chat';
+import {
+  CHAT_MESSAGES,
+  SEND_MESSSAGE_TO_CHAT,
+  handleNewMessage,
+} from '@/store/chat';
 import { API_URL } from '@/helpers/env';
 import { prettyTimeShort, prettyTime, getFakeId } from '@/helpers/functions';
 
@@ -163,24 +167,24 @@ export default class Chat extends React.Component {
           </Query>
 
           <Mutation
-            mutation={SEND_MESSSAGE}
+            mutation={SEND_MESSSAGE_TO_CHAT}
             optimisticResponse={{
-              sendMessage: {
+              sendMessageToChat: {
                 __typename: 'Message',
                 id: getFakeId(),
                 text,
                 date: new Date().toISOString(),
                 is_from_me: true,
                 attachments: null,
-                handle_id: id
+                handle_id: id,
               },
             }}
-            update={(cache, { data: { sendMessage } }) => {
-              console.log('sendMessage');
-              handleNewMessage(cache, sendMessage, id);
+            update={(cache, { data: { sendMessageToChat } }) => {
+              console.log('sendMessageToChat');
+              handleNewMessage(cache, sendMessageToChat, id);
             }}
           >
-            {(sendMessage) => (
+            {(sendMessageToChat) => (
               <View style={styles.Composer}>
                 <TextInput
                   style={styles.input}
@@ -195,11 +199,8 @@ export default class Chat extends React.Component {
                       return;
                     }
 
-                    sendMessage({
-                      variables: {
-                        handleGuids: handles.map((e) => e.guid),
-                        text,
-                      },
+                    sendMessageToChat({
+                      variables: { chatId: id, text },
                     });
 
                     this.setState({ text: '' });
