@@ -11,6 +11,8 @@ const resolveScript = (name) => path.resolve(__dirname, `${name}.applescript`);
 export async function sendMessage(handleGuids, message) {
   const handles = _.toArray(handleGuids);
 
+  const sanitizedMessage = message.trim();
+
   if (!handles.length) {
     return Promise.reject('sendMessage: Must supply at least one handle.');
   }
@@ -20,7 +22,7 @@ export async function sendMessage(handleGuids, message) {
   const { stdout, stderr } = await exec(`
     osascript ${resolveScript('sendmessage')} ${escapeBash(
     handle
-  )} ${escapeBash(message)}
+  )} ${escapeBash(sanitizedMessage)}
   `);
 
   return !stderr;

@@ -16,18 +16,14 @@ const getLastMessage = (ctx) =>
       date: fromAppleTime(message.date),
     }));
 
-const sendMessage = (_, { handleGuids, text }, ctx) => {
-  const { db } = ctx;
-  const sanitizedText = text.trim();
-
-  return imessage
-    .sendMessage(handleGuids, sanitizedText)
+const sendMessage = (_, { handleGuids, text }, ctx) =>
+  imessage
+    .sendMessage(handleGuids, text)
     .then(() => getLastMessage(ctx))
     .catch((err) => {
       console.error(err);
       return null;
     });
-};
 
 export default {
   auth: (_, args, ctx) => auth(ctx, args),
@@ -36,6 +32,10 @@ export default {
 
   sendMessageToChat: (_, { chatId, text }, ctx) =>
     ctx.loaders.chatHandles.load(chatId).then((handles) => {
+      if (!handles) {
+        return ctx.throw(400, 'Invalid chatId.');
+      }
+
       const handleGuids = handles.map((e) => e.guid);
       return sendMessage(_, { handleGuids, text }, ctx);
     }),
