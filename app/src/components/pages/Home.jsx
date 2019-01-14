@@ -168,7 +168,10 @@ export default class Home extends React.Component {
               .sort((a, b) => b.sort - a.sort);
 
             const dataProvider = new DataProvider(
-              (r1, r2) => r1.id !== r2.id || r1.sort !== r2.sort
+              (r1, r2) =>
+                r1.id !== r2.id ||
+                r1.sort !== r2.sort ||
+                r1.is_read !== r2.is_read
             );
 
             return (
