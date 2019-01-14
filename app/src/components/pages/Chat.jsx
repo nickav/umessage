@@ -20,7 +20,12 @@ import {
   handleNewMessage,
 } from '@/store/chat';
 import { API_URL } from '@/helpers/env';
-import { prettyTimeShort, prettyTime, getFakeId } from '@/helpers/functions';
+import {
+  prettyTimeShort,
+  prettyTime,
+  getFakeId,
+  isLargeText,
+} from '@/helpers/functions';
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -49,7 +54,14 @@ export default class Chat extends React.Component {
   }) => (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={[styles.Message]}>
-        <Text style={[styles.text, is_from_me && styles.me]} selectable>
+        <Text
+          style={[
+            styles.text,
+            is_from_me && styles.me,
+            isLargeText(text) && styles.large,
+          ]}
+          selectable
+        >
           {text}
         </Text>
         {isExpanded && (
@@ -175,7 +187,7 @@ export default class Chat extends React.Component {
                 is_from_me: true,
                 attachments: null,
                 handle_id: id,
-                is_read: true
+                is_read: true,
               },
             }}
             update={(cache, { data: { sendMessageToChat } }) => {

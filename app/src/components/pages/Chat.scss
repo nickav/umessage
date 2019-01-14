@@ -8,10 +8,6 @@
   background-color: #000;
 }
 
-.text {
-  color: #fff;
-}
-
 .Message {
   padding: 12px 32px;
   width: 100%;
@@ -22,8 +18,16 @@
   width: 100%;
 }
 
+.text {
+  color: #fff;
+}
+
 .me {
   color: #888;
+}
+
+.large {
+  font-size: 24px;
 }
 
 .Composer {

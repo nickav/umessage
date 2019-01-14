@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import DeviceInfo from 'react-native-device-info';
+import emojiRegex from 'emoji-regex/text';
 
 const is24Hour = DeviceInfo.is24Hour();
 const timeFormat = is24Hour ? 'HH:mm' : 'h:mm a';
@@ -87,3 +88,11 @@ const transformChatSections = (messages, insertTimesAfter = 3600000) =>
       a.from.id === b.from.id &&
       Math.abs(a.createdAtTime - b.createdAtTime) < insertTimesAfter
   );
+
+export const isOnlyEmojis = (text) => {
+  const noEmojis = text.replace(emojiRegex(), '');
+  const noSpace = noEmojis.replace(/[\s\n]/gm, '');
+  return !noSpace;
+};
+
+export const isLargeText = (text) => isOnlyEmojis(text);

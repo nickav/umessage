@@ -20,6 +20,7 @@
     "apollo-link-ws": "^1.0.12",
     "apollo-utilities": "^1.0.27",
     "dayjs": "^1.7.8",
+    "emoji-regex": "^7.0.3",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "hibar": "^0.3.3",
