@@ -177,6 +177,7 @@ export default class Chat extends React.Component {
                 is_from_me: true,
                 attachments: null,
                 handle_id: id,
+                is_read: true
               },
             }}
             update={(cache, { data: { sendMessageToChat } }) => {

@@ -46,11 +46,14 @@ export default {
       return sendMessage(_, { handleGuids, text }, ctx);
     }),
 
-  markRead: (_, { messageId }, ctx) =>
+  markRead: (_, { chatId, afterMessageId }, ctx) =>
     ctx.db
       .run(
         `
-        UPDATE message SET is_read = 1 WHERE ROWID = ${messageId};
+        UPDATE message SET is_read = 1
+        JOIN chat_message_join ON chat_message_join.message_id = message.ROWID
+        WHERE chat_id = ${chatId}
+        AND ROWID >= ${afterMessageId};
         `
       )
       .then(() => true)

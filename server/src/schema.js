@@ -100,8 +100,8 @@ export default gql`
     # send message to a particular chat
     sendMessageToChat(chatId: Int!, text: String!): Message @auth
 
-    # mark a message as read
-    markRead(messageId: Int!): Boolean @auth
+    # mark all messages as read in chatId
+    markRead(chatId: Int!, afterMessageId: Int!): Boolean @auth
   }
 
   type Subscription {
