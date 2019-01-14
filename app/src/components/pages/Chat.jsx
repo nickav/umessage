@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Query, Mutation } from 'react-apollo';
 import { Linking, TouchableHighlight } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './Chat.scss';
 import Header from '@/components/common/Header';
@@ -31,10 +32,7 @@ export default class Chat extends React.Component {
           onPress={() => Linking.openURL(`tel:${handles[0].guid}`)}
           style={styles.Icon}
         >
-          <Image
-            source={require('./call.png')}
-            style={{ width: 24, height: 24 }}
-          />
+          <Icon name="call" size={24} color="#fff" />
         </TouchableHighlight>
       ),
     };

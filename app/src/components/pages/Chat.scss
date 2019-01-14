@@ -28,8 +28,10 @@
 .Composer {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   margin-top: auto;
-  width: 100%;
+  padding: 0 32px;
 }
 
 .input {
@@ -40,5 +42,5 @@
 }
 
 .Icon {
-  padding: 16px;
+  padding: 16px 24px;
 }
