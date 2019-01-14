@@ -25,6 +25,7 @@ import {
   prettyTime,
   getFakeId,
   isLargeText,
+  createMessageBlocks
 } from '@/helpers/functions';
 
 export default class Chat extends React.Component {
@@ -53,7 +54,7 @@ export default class Chat extends React.Component {
     isExpanded,
   }) => (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View style={[styles.Message]}>
+      <View style={styles.Message}>
         <Text
           style={[
             styles.text,
@@ -80,6 +81,36 @@ export default class Chat extends React.Component {
       </View>
     </TouchableWithoutFeedback>
   );
+
+  static TimeBlock = ({ time, date }) => (
+    <View style={styles.TimeBlock}>
+      <Text style={styles.text}>{prettyTime(time)}</Text>
+    </View>
+  );
+
+  static MessageBlock = ({ messages }) => (
+    <View style={styles.MessageBlock}>
+      {messages.map((message) => (
+        <Chat.Message
+          {...message}
+          key={message.id}
+          isExpanded={false}
+          onPress={() => {}}
+        />
+      ))}
+    </View>
+  );
+
+  static Block = ({ type, ...rest }) => {
+    switch (type) {
+      case 'messages':
+        return <Chat.MessageBlock {...rest} />
+      case 'time':
+        return <Chat.TimeBlock {...rest} />
+      default:
+        return null;
+    }
+  }
 
   state = {
     text: '',
@@ -160,15 +191,15 @@ export default class Chat extends React.Component {
                           });
                         })
                   }
-                  data={data.chat.messagePage.items}
+                  data={createMessageBlocks(data.chat.messagePage.items)}
                   renderItem={({ item }) => (
-                    <Chat.Message
+                    <Chat.Block
                       {...item}
                       isExpanded={!!expanded[item.id]}
                       onPress={this.toggleExpanded(item.id)}
                     />
                   )}
-                  keyExtractor={(item, i) => item.id.toString()}
+                  keyExtractor={(item, index) => index.toString()}
                 />
               ) : (
                 <Text>Loading...</Text>

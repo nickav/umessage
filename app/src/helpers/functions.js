@@ -64,30 +64,52 @@ export const getFakeId = (() => {
   return () => --id;
 })();
 
-export const arrCollect = (arr, equals = () => false) =>
-  arr.reduce((result, curr, i, arr) => {
-    const group = result[result.length - 1];
-    const prev = group[group.length - 1];
+const arrCollect = (arr, equals = () => false) =>
+  arr.reduce(
+    (result, curr, i, arr) => {
+      const group = result[result.length - 1];
+      const prev = group[group.length - 1];
 
-    if (equals(prev, curr, group, i, arr)) {
-      group.push(curr);
-    } else {
-      result.push([curr]);
-    }
+      if (!prev || equals(prev, curr, group, i, arr)) {
+        group.push(curr);
+      } else {
+        result.push([curr]);
+      }
 
-    return result;
-  }, arr.length ? [[arr[0]]] : []);
+      return result;
+    },
+    [[]]
+  );
 
-const transformChatSections = (messages, insertTimesAfter = 3600000) =>
+export const createMessageBlocks = (
+  messages,
+  options = { groupTime: 60 * 60 * 1000 }
+) =>
   arrCollect(
-    messages.map((m) => ({
-      ...m,
-      createdAtTime: new Date(m.createdAt).getTime(),
+    messages.map((e) => ({
+      ...e,
+      time: new Date(e.date).getTime(),
     })),
     (a, b) =>
-      a.from.id === b.from.id &&
-      Math.abs(a.createdAtTime - b.createdAtTime) < insertTimesAfter
-  );
+      a.handle_id === b.handle_id &&
+      a.is_from_me === b.is_from_me &&
+      Math.abs(a.time - b.time) < options.groupTime
+  )
+    .map((messages) => ({ type: 'messages', messages: messages.reverse() }))
+    .reduce((result, curr, i, arr) => {
+      const prev = arr[i - 1];
+      const { date, time } = curr.messages[0];
+      const prevTime = prev ? prev.messages[0].time : 0;
+
+      // insert time blocks
+      if (prevTime && Math.abs(time - prevTime) >= options.groupTime) {
+        result.push({ type: 'time', time, date });
+      }
+
+      result.push(curr);
+
+      return result;
+    }, []);
 
 export const isOnlyEmojis = (text) => {
   const noEmojis = text.replace(emojiRegex(), '');
