@@ -28,6 +28,12 @@ const sendMessage = (_, { handleGuids, text }, ctx) =>
 export default {
   auth: (_, args, ctx) => auth(ctx, args),
 
+  setToken: (_, { token }, ctx) => {
+    return setToken(token)
+      .then(() => true)
+      .catch(() => false);
+  },
+
   sendMessage,
 
   sendMessageToChat: (_, { chatId, text }, ctx) =>
@@ -40,9 +46,16 @@ export default {
       return sendMessage(_, { handleGuids, text }, ctx);
     }),
 
-  setToken: (_, { token }, ctx) => {
-    return setToken(token)
+  markRead: (_, { messageId }, ctx) =>
+    ctx.db
+      .run(
+        `
+        UPDATE message SET is_read = 1 WHERE ROWID = ${messageId};
+        `
+      )
       .then(() => true)
-      .catch(() => false);
-  },
+      .catch((err) => {
+        console.log(err);
+        return false;
+      }),
 };

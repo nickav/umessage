@@ -32,7 +32,7 @@ export default class Home extends React.Component {
     title: 'Messages',
   };
 
-  static Chat = ({ id, display_name, messagePage, onPress }) => (
+  static Chat = ({ id, display_name, unread, messagePage, onPress }) => (
     <View style={styles.Chat}>
       <TouchableNativeFeedback
         onPress={onPress}
@@ -43,15 +43,26 @@ export default class Home extends React.Component {
       >
         <View style={styles.inner}>
           <View style={styles.left}>
-            <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+            <Text
+              style={[styles.title, unread && styles.unread]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {display_name}
             </Text>
-            <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
+            <Text
+              style={[styles.text, unread && styles.unread]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {messagePage.items[0].text}
             </Text>
           </View>
           <View style={styles.right}>
-            <Text style={styles.text} numberOfLines={1}>
+            <Text
+              style={[styles.text, unread && styles.unread]}
+              numberOfLines={1}
+            >
               {prettyTimeTiny(messagePage.items[0].date)}
             </Text>
           </View>
@@ -122,10 +133,13 @@ export default class Home extends React.Component {
     const { contactsByPhone } = this.state;
     const display_name = getDisplayName(item, contactsByPhone);
 
+    const lastMessage = item.messagePage.items[0];
+
     return (
       <Home.Chat
         {...item}
         display_name={display_name}
+        unread={!lastMessage.is_from_me && !lastMessage.is_read}
         onPress={() => navigate('Chat', { chat: { ...item, display_name } })}
       />
     );
