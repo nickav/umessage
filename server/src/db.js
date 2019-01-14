@@ -15,7 +15,8 @@ async function createDatabase() {
     message.is_from_me,
     message.cache_has_attachments,
     message.handle_id,
-    message.associated_message_guid
+    message.associated_message_guid,
+    message.is_read
   `;
 
   db.getHandleProps = () => `

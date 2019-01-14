@@ -1,24 +1,15 @@
 import gql from 'graphql-tag';
 
-import { handleNewMessage } from '@/store/chat';
+import { handleNewMessage, MESSAGE_FRAGMENT } from '@/store/chat';
 
 export const MESSAGE_ADDED = gql`
+  ${MESSAGE_FRAGMENT}
   subscription {
     messageAdded {
-      id
-      text
-      date
-      is_from_me
-      handle_id
+      ...MessageFragment
 
       chat {
         id
-      }
-
-      attachments {
-        id
-        mime_type
-        total_bytes
       }
     }
   }

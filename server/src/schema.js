@@ -35,6 +35,7 @@ export default gql`
     text: String!
     date: Date!
     is_from_me: Boolean!
+    is_read: Boolean!
     handle_id: Int!
 
     associated_message_guid: String

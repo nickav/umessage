@@ -1,6 +1,24 @@
 import gql from 'graphql-tag';
 
+export const MESSAGE_FRAGMENT = gql`
+  fragment MessageFragment on Message {
+    id
+    text
+    date
+    is_from_me
+    handle_id
+    is_read
+
+    attachments {
+      id
+      mime_type
+      total_bytes
+    }
+  }
+`;
+
 export const CHAT_FEED = gql`
+  ${MESSAGE_FRAGMENT}
   {
     chats {
       id
@@ -15,17 +33,7 @@ export const CHAT_FEED = gql`
       messagePage(page: { size: 1 }) {
         items {
           ... on Message {
-            id
-            text
-            date
-            is_from_me
-            handle_id
-
-            attachments {
-              id
-              mime_type
-              total_bytes
-            }
+            ...MessageFragment
           }
         }
       }
@@ -34,6 +42,7 @@ export const CHAT_FEED = gql`
 `;
 
 export const CHAT_MESSAGES = gql`
+  ${MESSAGE_FRAGMENT}
   query($id: Int!, $page: PageInput = {}) {
     chat(id: $id) {
       id
@@ -49,17 +58,7 @@ export const CHAT_MESSAGES = gql`
         cursor
         items {
           ... on Message {
-            id
-            text
-            date
-            is_from_me
-            handle_id
-
-            attachments {
-              id
-              mime_type
-              total_bytes
-            }
+            ...MessageFragment
           }
         }
       }
@@ -68,37 +67,19 @@ export const CHAT_MESSAGES = gql`
 `;
 
 export const SEND_MESSSAGE = gql`
+  ${MESSAGE_FRAGMENT}
   mutation($handleGuids: [String]!, $text: String!) {
     sendMessage(handleGuids: $handleGuids, text: $text) {
-      id
-      text
-      date
-      is_from_me
-      handle_id
-
-      attachments {
-        id
-        mime_type
-        total_bytes
-      }
+      ...MessageFragment
     }
   }
 `;
 
 export const SEND_MESSSAGE_TO_CHAT = gql`
+  ${MESSAGE_FRAGMENT}
   mutation($chatId: Int!, $text: String!) {
     sendMessageToChat(chatId: $chatId, text: $text) {
-      id
-      text
-      date
-      is_from_me
-      handle_id
-
-      attachments {
-        id
-        mime_type
-        total_bytes
-      }
+      ...MessageFragment
     }
   }
 `;
