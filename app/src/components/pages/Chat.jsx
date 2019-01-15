@@ -75,7 +75,8 @@ export default class Chat extends React.Component {
         )}
         {attachments && (
           <Image
-            style={{ width: 64, height: 64 }}
+            style={{ width: 256, height: 340, borderRadius: 8 }}
+            resizeMode="cover"
             source={{
               uri: `${env.API_URL}/attachments/${attachments[0].id}`,
             }}
