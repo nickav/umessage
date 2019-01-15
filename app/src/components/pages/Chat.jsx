@@ -19,14 +19,20 @@ import {
   SEND_MESSSAGE_TO_CHAT,
   handleNewMessage,
 } from '@/store/chat';
-import { API_URL } from '@/helpers/env';
+import env from '@/helpers/env';
 import {
   prettyTimeShort,
   prettyTime,
   getFakeId,
   isLargeText,
-  createMessageBlocks
+  createMessageBlocks,
 } from '@/helpers/functions';
+
+const hasText = (text) => {
+  if (!text) return false;
+  if (text.length === 1 && text.charCodeAt(0) === 65532) return false;
+  return text.length > 0;
+};
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -55,28 +61,30 @@ export default class Chat extends React.Component {
   }) => (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.Message}>
-        <Text
-          style={[
-            styles.text,
-            is_from_me && styles.me,
-            isLargeText(text) && styles.large,
-          ]}
-          selectable
-        >
-          {text}
-        </Text>
-        {isExpanded && (
-          <Text style={[styles.text, is_from_me && styles.me]}>
-            {prettyTimeShort(date)}
+        {hasText(text) && (
+          <Text
+            style={[
+              styles.text,
+              is_from_me && styles.me,
+              isLargeText(text) && styles.large,
+            ]}
+            selectable
+          >
+            {text}
           </Text>
         )}
         {attachments && (
           <Image
             style={{ width: 64, height: 64 }}
             source={{
-              uri: `http://${API_URL}/attachments/${attachments[0].id}`,
+              uri: `${env.API_URL}/attachments/${attachments[0].id}`,
             }}
           />
+        )}
+        {isExpanded && (
+          <Text style={[styles.text, is_from_me && styles.me]}>
+            {prettyTimeShort(date)}
+          </Text>
         )}
       </View>
     </TouchableWithoutFeedback>
@@ -88,14 +96,14 @@ export default class Chat extends React.Component {
     </View>
   );
 
-  static MessageBlock = ({ messages }) => (
+  static MessageBlock = ({ messages, expanded, onPress }) => (
     <View style={styles.MessageBlock}>
       {messages.map((message) => (
         <Chat.Message
-          {...message}
           key={message.id}
-          isExpanded={false}
-          onPress={() => {}}
+          {...message}
+          isExpanded={!!expanded[message.id]}
+          onPress={onPress(message.id)}
         />
       ))}
     </View>
@@ -104,13 +112,13 @@ export default class Chat extends React.Component {
   static Block = ({ type, ...rest }) => {
     switch (type) {
       case 'messages':
-        return <Chat.MessageBlock {...rest} />
+        return <Chat.MessageBlock {...rest} />;
       case 'time':
-        return <Chat.TimeBlock {...rest} />
+        return <Chat.TimeBlock {...rest} />;
       default:
         return null;
     }
-  }
+  };
 
   state = {
     text: '',
@@ -195,8 +203,8 @@ export default class Chat extends React.Component {
                   renderItem={({ item }) => (
                     <Chat.Block
                       {...item}
-                      isExpanded={!!expanded[item.id]}
-                      onPress={this.toggleExpanded(item.id)}
+                      expanded={expanded}
+                      onPress={this.toggleExpanded}
                     />
                   )}
                   keyExtractor={(item, index) => index.toString()}
