@@ -95,7 +95,10 @@ export const createMessageBlocks = (
       a.is_from_me === b.is_from_me &&
       Math.abs(a.time - b.time) < options.groupTime
   )
-    .map((messages) => ({ type: 'messages', messages: messages.reverse() }))
+    .map((e) => {
+      const messages = e.reverse();
+      return { type: 'messages', messages, id: messages[0].id };
+    })
     .reduce((result, curr, i, arr) => {
       const prev = arr[i - 1];
       const { date, time } = curr.messages[0];
@@ -103,17 +106,16 @@ export const createMessageBlocks = (
 
       // insert time blocks
       if (prevTime && Math.abs(time - prevTime) >= options.groupTime) {
-        result.push({ type: 'time', time, date });
+        result.push({ type: 'time', time, date, id: time });
       }
 
       result.push(curr);
-
       return result;
     }, []);
 
 export const isOnlyEmojis = (text) => {
   const noEmojis = text.replace(emojiRegex(), '');
-  const noSpace = noEmojis.replace(/[\s\n]/gm, '');
+  const noSpace = noEmojis.replace(/\s+/gm, '');
   return !noSpace;
 };
 

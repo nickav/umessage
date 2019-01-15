@@ -51,13 +51,22 @@ export const createListeners = ({ onOpen, onNotification } = {}) => {
       onOpen && onOpen(notification);
     });
 
+  const channel = new firebase.notifications.Android.Channel(
+    'channelId',
+    'Channel Name',
+    firebase.notifications.Android.Importance.Max
+  ).setDescription('A natural description of the channel');
+  firebase.notifications().android.createChannel(channel);
+
   return [
     // Triggered when a particular notification has been received in foreground
     firebase.notifications().onNotification((notification) => {
       const { title, body } = notification;
 
-      onNotification && onNotification(notification, 'foreground');
-      //firebase.notifications().displayNotification(notification);
+      if (onNotification && onNotification(notification, 'foreground')) {
+        notification.android.setChannelId('channelId');
+        firebase.notifications().displayNotification(notification);
+      };
     }),
 
     // If your app is in background, you can listen for when a notification is clicked / tapped / opened

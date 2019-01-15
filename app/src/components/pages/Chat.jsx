@@ -209,7 +209,7 @@ export default class Chat extends React.Component {
                       onPress={this.toggleExpanded}
                     />
                   )}
-                  keyExtractor={(item, index) => index.toString()}
+                  keyExtractor={(item, index) => item.id.toString()}
                 />
               ) : (
                 <Text>Loading...</Text>

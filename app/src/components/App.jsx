@@ -68,6 +68,17 @@ class App extends React.Component {
           })
         );
       },
+      onNotification: (notification, appVisibility) => {
+        if (appVisibility === 'foreground') {
+          const { routeName, params } = this.getActiveRoute(
+            this.navigator.state.nav
+          );
+
+          const chatId = parseInt(notification.data.chat_id, 10);
+          console.log('Notification', routeName, params, chatId);
+          return routeName !== 'Chat' || params.chat.id !== chatId;
+        }
+      },
     });
   };
 
@@ -76,6 +87,20 @@ class App extends React.Component {
     this.subs = subscriptions.subscribe(client);
 
     console.log('onAppStateChange', appState);
+  };
+
+  getActiveRoute = (navigationState) => {
+    if (!navigationState) {
+      return null;
+    }
+
+    const route = navigationState.routes[navigationState.index];
+    // dive into nested navigators
+    if (route.routes) {
+      return this.getActiveRoute(route);
+    }
+
+    return route;
   };
 
   componentWillUnmount() {
