@@ -6,9 +6,10 @@ import {
   FlatList,
   Image,
   TouchableWithoutFeedback,
+  Linking,
+  TouchableHighlight
 } from 'react-native';
 import { Query, Mutation } from 'react-apollo';
-import { Linking, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './Chat.scss';
