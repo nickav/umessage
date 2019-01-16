@@ -59,23 +59,27 @@ export default (ctx, options) => {
         // send message to pubsub
         onMessageAdded(message);
 
-        if (!token || message.is_from_me) {
+        if (!token || message.is_from_me || message.is_read) {
           return;
         }
 
         // send notification to devices
         console.log('notifying device', token, message);
-        notifications.send({
-          token,
-          notification: {
-            title: `${message.handle_id}`,
-            body: message.text,
-          },
-          data: {
-            message: JSON.stringify(message),
-            chat_id: `${message.chat_id}`,
-          },
-        });
+        notifications
+          .send({
+            token,
+            notification: {
+              title: `${message.handle_id}`,
+              body: message.text,
+            },
+            data: {
+              message: JSON.stringify(message),
+              chat_id: `${message.chat_id}`,
+            },
+          })
+          .catch((err) => {
+            console.error('Error sending notification.', err);
+          });
       });
     });
   });
