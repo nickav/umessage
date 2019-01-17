@@ -120,3 +120,8 @@ export const isOnlyEmojis = (text) => {
 };
 
 export const isLargeText = (text) => isOnlyEmojis(text);
+
+export const filterText = (text) => {
+  // remove object replacement codes [obj]
+  return text.replace(/\uFFFC/g, '');
+};

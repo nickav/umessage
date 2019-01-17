@@ -7,7 +7,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   Linking,
-  TouchableHighlight
+  TouchableHighlight,
 } from 'react-native';
 import { Query, Mutation } from 'react-apollo';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -27,13 +27,8 @@ import {
   getFakeId,
   isLargeText,
   createMessageBlocks,
+  filterText
 } from '@/helpers/functions';
-
-const hasText = (text) => {
-  if (!text) return false;
-  if (text.length === 1 && text.charCodeAt(0) === 65532) return false;
-  return text.length > 0;
-};
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -49,6 +44,18 @@ export default class Chat extends React.Component {
         </TouchableHighlight>
       ),
     };
+  };
+
+  static Attachment = ({ id, mime_type }) => {
+    return (
+      <Image
+        style={{ width: 256, height: 340, borderRadius: 8 }}
+        resizeMode="cover"
+        source={{
+          uri: `${env.API_URL}/attachments/${id}`,
+        }}
+      />
+    );
   };
 
   static Message = ({
@@ -74,15 +81,10 @@ export default class Chat extends React.Component {
             {text}
           </Text>
         )}
-        {attachments && (
-          <Image
-            style={{ width: 256, height: 340, borderRadius: 8 }}
-            resizeMode="cover"
-            source={{
-              uri: `${env.API_URL}/attachments/${attachments[0].id}`,
-            }}
-          />
-        )}
+        {attachments &&
+          attachments.map((attachment) => (
+            <Chat.Attachment key={attachment.id} {...attachment} />
+          ))}
         {isExpanded && (
           <Text style={[styles.text, is_from_me && styles.me]}>
             {prettyTimeShort(date)}
@@ -104,6 +106,7 @@ export default class Chat extends React.Component {
         <Chat.Message
           key={message.id}
           {...message}
+          text={filterText(message.text)}
           isExpanded={!!expanded[message.id]}
           onPress={onPress(message.id)}
         />
