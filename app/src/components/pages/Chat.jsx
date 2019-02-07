@@ -94,7 +94,7 @@ export default class Chat extends React.Component {
     </TouchableWithoutFeedback>
   );
 
-  static TimeBlock = ({ time, date }) => (
+  static TimeBlock = ({ time }) => (
     <View style={styles.TimeBlock}>
       <Text style={styles.text}>{prettyTime(time)}</Text>
     </View>

@@ -106,7 +106,7 @@ export const createMessageBlocks = (
 
       // insert time blocks
       if (prevTime && Math.abs(time - prevTime) >= options.groupTime) {
-        result.push({ type: 'time', time, date, id: time });
+        result.push({ type: 'time', time: prevTime, id: prevTime });
       }
 
       result.push(curr);

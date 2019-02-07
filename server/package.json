@@ -12,7 +12,7 @@
     "server": "yarn start",
     "start": "if-env NODE_ENV=production && yarn start:prod || yarn start:dev",
     "start:dev": "nodemon --watch 'src/**/*' ./src --exec babel-node",
-    "start:prod": "***REMOVED*** && node dist"
+    "start:prod": "yarn dist && node dist"
   },
   "lint-staged": {
     "*.{js,jsx,json,scss}": [
